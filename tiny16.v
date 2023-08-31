@@ -34,14 +34,10 @@ module tiny16 (
     );
 
     alu cpu (
-      .clk(CLK),
-      .rst(RST),
-      .in_en(1),
       .opcode('h4),
       .ar_flag(0),
       .src1(0),
       .src2(0),
-      .out_en(1),
       .dst()
     );
 
