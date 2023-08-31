@@ -1,0 +1,6 @@
+*.vcd
+*.blif
+*.asc
+*.bin
+*.rpt
+*_tb
