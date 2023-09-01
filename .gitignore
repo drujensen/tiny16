@@ -3,4 +3,4 @@
 *.asc
 *.bin
 *.rpt
-*_tb
+*.tb

@@ -9,19 +9,20 @@ module memory (
   output reg [15:0] out_data
 );
 
-  reg [15:0] mem ['h0000:'hFFFF];
+  parameter MEM_SIZE = 65536;
+  reg [15:0] mem [0:MEM_SIZE-1];
 
-  always @ (posedge clk) begin
-    if (rst == 1'b1) begin
-      out_data <= 0;
+  always @(posedge clk) begin
+    if (rst) begin
+      out_data <= 16'b0;
     end
-    if (rst == 1'b0 && out_en == 1'b1) begin
+    else if (out_en) begin
       out_data <= mem[out_addr];
     end
   end
 
-  always @ (negedge clk) begin
-    if(rst == 1'b0 && in_en == 1'b1) begin
+  always @(negedge clk) begin
+    if (!rst && in_en) begin
       mem[in_addr] <= in_data;
     end
   end
