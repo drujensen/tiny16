@@ -14,6 +14,7 @@ module tiny16 (
 
     //create a bus
     wire [15:0] bus;
+    assign OUT = bus;
 
     wire mem_addr_en;
     wire mem_in_en;
@@ -89,6 +90,4 @@ module tiny16 (
         .reg_pc_inc(reg_pc_inc),
         .out(bus)
     );
-
-    assign OUT = bus;
 endmodule
