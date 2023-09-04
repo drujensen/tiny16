@@ -5,21 +5,21 @@ module controller (
   input rst,
   input [15:0] in,
   input [3:0] flags,
-  output [3:0] alu_opcode,
-  output alu_out_en,
-  output alu_ar_flag,
-  output mem_addr_en,
-  output mem_in_en,
-  output mem_out_en,
-  output [2:0] reg_src_sel,
-  output [2:0] reg_dst_sel,
-  output reg_in_en,
-  output reg_out_en,
-  output reg_pc_inc,
+  output reg [3:0] alu_opcode,
+  output reg alu_out_en,
+  output reg alu_ar_flag,
+  output reg mem_addr_en,
+  output reg mem_in_en,
+  output reg mem_out_en,
+  output reg [2:0] reg_src_sel,
+  output reg [2:0] reg_dst_sel,
+  output reg reg_in_en,
+  output reg reg_out_en,
+  output reg reg_pc_inc,
   output reg [15:0] out
 );
 
-  reg [2:0] counter;
+  wire [2:0] counter;
   reg [3:0] alu_flags;
   reg [3:0] opcode;
   reg imm;
@@ -28,7 +28,7 @@ module controller (
   reg [2:0] src;
   reg [4:0] off;
 
-  wire step_reset;
+  reg step_reset;
 
   step step (
    .clk(clk),
@@ -37,7 +37,7 @@ module controller (
   );
 
   always @(posedge clk) begin
-    //reset all signals
+    // Reset all signals
     alu_opcode = 4'b0000;
     alu_out_en = 0;
     alu_ar_flag = 0;

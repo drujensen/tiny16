@@ -15,10 +15,9 @@ module registers (
 
   always @(posedge clk) begin
     if (rst) begin
-      src <= 0;
-      dst <= 0;
-      gpr[0] <= 16'h0000; //PC set to start at 0000
-      gpr[1] <= 16'hFFFF; //SP set to start at FFFF
+      {src, dst} <= 16'h0000;
+      gpr[0] <= 16'h0000;
+      gpr[1] <= 16'hFFFF;
     end
     else begin
       src <= gpr[src_sel];
@@ -27,10 +26,10 @@ module registers (
   end
 
   always @(negedge clk) begin
-    if (!rst  && in_en == 1'b1) begin
+    if (!rst && in_en) begin
       gpr[dst_sel] <= in;
     end
-    if (!rst  && out_en == 1'b1) begin
+    if (!rst && out_en) begin
       out <= gpr[dst_sel];
     end
   end

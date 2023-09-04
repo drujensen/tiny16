@@ -6,6 +6,7 @@
 module tiny16 (
     input  CLK,            // 16MHz clock
     input  RST,
+    output [15:0] OUT,     // 16-bit output
     output USBPU           // USB pull-up resistor
 );
     // drive USB pull-up resistor to '0' to disable USB
@@ -89,7 +90,5 @@ module tiny16 (
         .out(bus)
     );
 
-  always @ (posedge clk) begin
-
-  end
+    assign OUT = bus;
 endmodule

@@ -1,5 +1,4 @@
-// Defined timescale
-`timescale 1 ns / 10 ps
+`timescale 1ns/1ns
 
 module alu_test;
 
