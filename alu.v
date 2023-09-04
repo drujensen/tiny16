@@ -1,16 +1,18 @@
 module alu (
+  input clk,
+  input rst,
   input [3:0] opcode,
   input ar_flag,
   input [15:0] src1,
   input [15:0] src2,
-  output [15:0] dst,
+  input out_en,
+  output [15:0] out,
   output [3:0] flags //O C N Z
 );
 
   reg [16:0] result;
 
-  always @*
-  begin
+  always @(posedge clk) begin
     case(opcode)
       4'b0011 : begin
         result = src1 + src2;
@@ -39,10 +41,17 @@ module alu (
     endcase
   end
 
-  assign dst = result[15:0];
-  assign flags[3] = (src1[15] == src2[15] && result[15] != src1[15]);
-  assign flags[2] = result[16];        // Carry
-  assign flags[1] = result[15];        // Negative
-  assign flags[0] = result[15:0] == 0; // Zero
-
+  always @(negedge clk) begin
+    if (rst) begin
+      result <= 17'b0;
+      flags <= 4'b0000;
+    end
+    if (!rst && out_en) begin
+      out = result[15:0];
+      flags[3] = (src1[15] == src2[15] && result[15] != src1[15]);
+      flags[2] = result[16];        // Carry
+      flags[1] = result[15];        // Negative
+      flags[0] = result[15:0] == 0; // Zero
+    end
+  end
 endmodule
