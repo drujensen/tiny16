@@ -6,9 +6,9 @@ module registers (
   input in_en,
   input [15:0] in,
   input out_en,
+  output reg [15:0] out,
   output reg [15:0] src,
-  output reg [15:0] dst,
-  output reg [15:0] out
+  output reg [15:0] dst
 );
 
   reg [15:0] gpr[0:7];
@@ -30,7 +30,7 @@ module registers (
       gpr[dst_sel] <= in;
     end
     if (!rst && out_en) begin
-      out <= gpr[dst_sel];
+      out <= gpr[src_sel];
     end
   end
 endmodule
