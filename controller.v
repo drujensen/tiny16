@@ -31,7 +31,7 @@ module controller (
   reg [2:0] src;
   reg [4:0] off;
 
-  reg step_reset;
+  reg step_reset = 0;
 
   step step (
    .clk(clk),

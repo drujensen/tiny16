@@ -18,6 +18,12 @@ module registers (
       {src, dst} <= 16'h0000;
       gpr[0] <= 16'h0000;
       gpr[1] <= 16'hFFFF;
+      gpr[2] <= 16'h0000;
+      gpr[3] <= 16'h0000;
+      gpr[4] <= 16'h0000;
+      gpr[5] <= 16'h0000;
+      gpr[6] <= 16'h0000;
+      gpr[7] <= 16'h0000;
     end
     else begin
       src <= gpr[src_sel];
