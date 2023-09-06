@@ -3,81 +3,130 @@
 module alu_test;
 
   // Inputs
+  reg clk = 0;
+  reg rst = 0;
   reg [3:0] opcode;
   reg [15:0] src1, src2;
   reg ar_flag = 0;
+  reg out_en = 1;
 
   // Outputs
-  wire [15:0] dst;
+  wire [15:0] out;
   wire [3:0] flags;
 
   // Instantiate the alu module
   alu dut (
+    .clk(clk),
+    .rst(rst),
     .opcode(opcode),
     .ar_flag(ar_flag),
     .src1(src1),
     .src2(src2),
-    .dst(dst),
+    .out_en(out_en),
+    .out(out),
     .flags(flags)
   );
 
+  // Clock generation
+    always begin
+      #1 clk = ~clk;
+    end
+
   // Testbench
   initial begin
-    // Initialize inputs
-    src1 = 10;       // Random test value
-    src2 = 5;        // Random test value
+    src1 <= 10;
+    src2 <= 5;
 
-    opcode = 4'b0011; // Addition operation
-    #10;
+    rst <= 1;
+    #4
+    rst <= 0;
+    out_en <= 0;
+    #4
 
-    $display("dst = %d", dst);
+    $display("RST:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b0100; // Subtraction operation
-    #10;
+    opcode <= 4'b0011; // Addition operation
+    out_en <= 1;
+    #4
 
-    $display("dst = %d", dst);
+    $display("ADD:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b0101; // Multiplication operation
-    #10
+    opcode <= 4'b0100; // Subtraction operation
+    #4
 
-    $display("dst = %d", dst);
+    $display("SUB:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b0110; // Division operation
-    #10
+    opcode <= 4'b0101; // Multiplication operation
+    #4
 
-    $display("dst = %d", dst);
+    $display("MUL:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b0111; // AND operation
-    #10
+    opcode <= 4'b0110; // Division operation
+    #4
 
-    $display("dst = %d", dst);
+    $display("DIV:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b1000; // OR operation
-    #10
+    opcode <= 4'b0111; // AND operation
+    #4
 
-    $display("dst = %d", dst);
+    $display("AND:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
-    opcode = 4'b1001; // XOR operation
-    #10
+    opcode <= 4'b1000; // OR operation
+    #4
 
-    $display("dst = %d", dst);
+    $display("OR:");
+    $display("out = %d", out);
     $display("flags = %b", flags);
 
+    opcode <= 4'b1001; // XOR operation
+    #4
+
+    $display("XOR:");
+    $display("out = %d", out);
+    $display("flags = %b", flags);
+
+    opcode <= 4'b1010; // SHL operation
+    #4
+
+    $display("SHL:");
+    $display("out = %d", out);
+    $display("flags = %b", flags);
+
+    opcode <= 4'b1011; // SHR operation
+    #4
+
+    $display("SHR:");
+    $display("out = %d", out);
+    $display("flags = %b", flags);
+
+    opcode <= 4'b1010; // ROL operation
+    ar_flag <= 1'b1;
+    #4
+
+    $display("ROL:");
+    $display("out = %d", out);
+    $display("flags = %b", flags);
+
+    opcode <= 4'b1011; // ROR operation
+    ar_flag <= 1'b1;
+    #4
+
+    $display("ROR:");
+    $display("out = %d", out);
+    $display("flags = %b", flags);
+
+    #4 $finish;
   end
-
-  initial begin
-    $dumpfile("alu.vcd");
-    $dumpvars(1, alu_test);
-
-    #100;
-    $display("Testbench finished");
-    $finish;
-  end
-
 endmodule
