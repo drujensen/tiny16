@@ -6,10 +6,10 @@ module step (
 
   always @(posedge clk) begin
     if (rst) begin
-      counter <= 3'b0;
-    end else begin
-      counter <= counter + 1;
+      counter = 3'b0;
     end
   end
-
+  always @(negedge clk) begin
+    counter = counter + 1;
+  end
 endmodule

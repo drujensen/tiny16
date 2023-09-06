@@ -34,6 +34,7 @@ module tiny16 (
 
     wire reg_in_en;
     wire reg_out_en;
+    wire reg_pc_inc;
     wire [2:0] reg_src_sel;
     wire [2:0] reg_dst_sel;
     wire [15:0] src;
@@ -48,6 +49,7 @@ module tiny16 (
         .in_en(reg_in_en),
         .in(bus),
         .out_en(reg_out_en),
+        .pc_inc(reg_pc_inc),
         .out(bus),
         .src(src),
         .dst(dst)

@@ -12,34 +12,34 @@ module step_tb;
     .counter(counter)
   );
 
+  always begin
+    #1 clk = ~clk;
+  end
+
   initial begin
     clk = 0;
     rst = 0;
 
     #4 rst = 1;
-    #8 rst = 0;
+    #2 rst = 0;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
-    #4;
+    #2;
     $display("counter = %b", counter);
     $finish;
-  end
-
-  always begin
-    #2 clk = ~clk;
   end
 
 endmodule

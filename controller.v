@@ -20,6 +20,7 @@ module controller (
 );
 
   wire [2:0] counter;
+  reg [15:0] in_reg;
   reg [3:0] alu_flags;
   reg [3:0] opcode;
   reg [11:0] jmpdst;
@@ -53,17 +54,16 @@ module controller (
     reg_out_en = 0;
     reg_pc_inc = 0;
     step_reset = 0;
+    out = 16'hZZZZ;
 
     case (counter)
       0 : begin
-        reg_dst_sel = 3'b000;
-        reg_out_en = 1;
         mem_addr_en = 1;
+        reg_src_sel = 3'b000;
+        reg_out_en = 1;
       end
       1 : begin
         mem_out_en = 1;
-        reg_pc_inc = 1;
-        alu_flags = flags;
         opcode = in[15:12];
         syscode = in[11:8];
         jmpdst = in[11:0];
@@ -119,7 +119,7 @@ module controller (
                     mem_addr_en = 1;
                     reg_out_en = 1;
                   end
-                  default: begin
+                  3 : begin
                     mem_out_en = 1;
                     reg_in_en = 1;
                     step_reset = 1;
@@ -147,7 +147,7 @@ module controller (
                   reg_in_en = 1;
                   reg_src_sel = 3'b111;
                 end
-                default: begin
+                3 : begin
                   alu_opcode = opcode;
                   alu_out_en = 1;
                   reg_in_en = 1;
@@ -166,7 +166,7 @@ module controller (
                     reg_src_sel = 3'b111;
                     reg_in_en = 1;
                   end
-                  default: begin
+                  4: begin
                     alu_opcode = opcode;
                     alu_out_en = 1;
                     reg_in_en = 1;
@@ -195,7 +195,7 @@ module controller (
                   reg_src_sel = 3'b111;
                   reg_in_en = 1;
                 end
-                default: begin
+                4 : begin
                   alu_opcode = opcode;
                   alu_ar_flag = imm;
                   alu_out_en = 1;
@@ -225,7 +225,7 @@ module controller (
                 reg_dst_sel = 3'b001;
                 reg_in_en = 1;
               end
-              default : begin
+              3 : begin
                 out = jmpdst[11:0];
                 reg_dst_sel = 3'b000;
                 reg_in_en = 1;
@@ -244,7 +244,7 @@ module controller (
                   reg_in_en = 1;
                   reg_src_sel = 3'b111;
                 end
-                default: begin
+                3 : begin
                   alu_out_en = 1;
                   step_reset = 1;
                 end
@@ -261,7 +261,7 @@ module controller (
                     reg_src_sel = 3'b111;
                     reg_in_en = 1;
                   end
-                  default: begin
+                  4 : begin
                     alu_out_en = 1;
                     step_reset = 1;
                   end
@@ -293,7 +293,7 @@ module controller (
                       mem_addr_en = 1;
                       reg_out_en = 1;
                     end
-                    default : begin
+                    3 : begin
                       mem_out_en = 1;
                       reg_in_en = 1;
                       step_reset = 1;

@@ -19,7 +19,7 @@ PROJ = tiny16
 PIN_DEF = pins.pcf
 DEVICE = lp8k
 
-all: $(PROJ).rpt $(PROJ).bin $(PROJ).tb
+all: $(PROJ).bin $(PROJ).tb
 
 %.blif: %.v
 	yosys -p 'synth_ice40 -top $(PROJ) -blif $@' $<
@@ -30,9 +30,6 @@ all: $(PROJ).rpt $(PROJ).bin $(PROJ).tb
 %.bin: %.asc
 	icepack $< $@
 
-%.rpt: %.asc
-	icetime -d $(DEVICE) -mtr $@ $<
-
 %.tb: %_tb.v %.v
 	iverilog -o $@ $^
 
@@ -40,7 +37,7 @@ prog: $(PROJ).bin
 	tinyprog -p $<
 
 clean:
-	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).rpt $(PROJ).bin $(PROJ).tb
+	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).bin $(PROJ).tb
 
 .SECONDARY:
 .PHONY: all prog clean
