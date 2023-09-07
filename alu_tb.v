@@ -34,12 +34,11 @@ module alu_test;
 
   // Testbench
   initial begin
-    src1 <= 10;
-    src2 <= 5;
-
     rst <= 1;
     #4
     rst <= 0;
+    src1 <= 10;
+    src2 <= 5;
     out_en <= 0;
     #4
 

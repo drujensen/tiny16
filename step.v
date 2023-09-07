@@ -1,15 +1,15 @@
 module step (
   input clk,
   input rst,
+  input nxt,
   output reg [2:0] counter
 );
 
   always @(posedge clk) begin
     if (rst) begin
       counter = 3'b0;
+    end else if (nxt) begin
+      counter = counter + 1;
     end
-  end
-  always @(negedge clk) begin
-    counter = counter + 1;
   end
 endmodule

@@ -60,6 +60,9 @@ module alu (
       flags <= 4'b0000;
     end
 
+  end
+
+  always @(negedge clk) begin
     if (!rst) begin
       if (out_en) begin
         out <= result[15:0];
@@ -72,8 +75,5 @@ module alu (
         out <= 16'hZZZZ; // Tri-state the output of the wire
       end
     end
-  end
-
-  always @(negedge clk) begin
   end
 endmodule

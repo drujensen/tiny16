@@ -2,10 +2,11 @@
 
 module tiny16_tb;
     // Declare signals and variables
-    reg CLK, RST;
+    reg CLK = 0;
+    reg RST = 0;
     wire [15:0] OUT;
     wire USBPU;
-    integer i;
+    integer i = 0;
 
     // Instantiate the DUT (Design Under Test)
     tiny16 dut (
@@ -23,8 +24,6 @@ module tiny16_tb;
     // Test stimulus
     initial begin
         // Initialize inputs
-        CLK = 0;
-        RST = 0;
         // Perform test operations
         // Write test code here
         // Populate memory
@@ -33,10 +32,12 @@ module tiny16_tb;
         dut.mem.mem[16'b0010] = 16'b0011010000110000;      // ADD X2, X3
 
         // Wait for reset to be released
-        #4 RST = 1;
-        #2 RST = 0;
+        RST <= 1;
+        #4
+        RST <= 0;
+        #2;
 
-        for (i=0; i<4; i=i+1) begin
+        for (i=0; i<8; i=i+1) begin
           $display("bus: %h", dut.bus);
           $display("cnt: %h", dut.ctrl.step.counter);
           $display("ins: %h", dut.ctrl.in);
