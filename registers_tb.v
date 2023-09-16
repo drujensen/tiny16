@@ -5,10 +5,12 @@ module registers_tb;
   reg rst;
   reg [2:0] src_sel;
   reg [2:0] dst_sel;
-  reg out_en;
   reg in_en;
   reg [15:0] in;
+  reg out_en;
+  reg pc_inc;
 
+  wire [15:0] out;
   wire [15:0] src;
   wire [15:0] dst;
 
@@ -17,16 +19,18 @@ module registers_tb;
     .rst(rst),
     .src_sel(src_sel),
     .dst_sel(dst_sel),
-    .out_en(out_en),
-    .src(src),
-    .dst(dst),
     .in_en(in_en),
-    .in(in)
+    .in(in),
+    .out_en(out_en),
+    .pc_inc(pc_inc),
+    .out(out),
+    .src(src),
+    .dst(dst)
   );
 
   // Clock generation
   always begin
-    #5 clk = ~clk;
+    #1 clk = ~clk;
   end
 
   initial begin
@@ -35,20 +39,24 @@ module registers_tb;
     rst = 0;
     src_sel = 0;
     dst_sel = 0;
-    out_en = 0;
     in_en = 0;
     in = 0;
+    out_en = 0;
+    pc_inc = 0;
 
     // Reset
-    #10 rst = 1;
-    #10 rst = 0;
+    #2 rst = 1;
+    #2 rst = 0;
 
     // read from register 0 and 1
     src_sel = 0;
     dst_sel = 1;
     out_en = 1;
-    #10 out_en = 0;
+    #2
 
+    out_en = 0;
+
+    $display("out = %d", out);
     $display("src = %d", src);
     $display("dst = %d", dst);
 
@@ -56,20 +64,25 @@ module registers_tb;
     dst_sel = 2;
     in_en = 1;
     in = 10;
-    #10 in_en = 0;
+    #2 in_en = 0;
 
     // write a value to register 3
     dst_sel = 3;
     in_en = 1;
     in = 20;
-    #10 in_en = 0;
+    #2
+
+    in_en = 0;
 
     // read from register 0 and 1
     src_sel = 2;
     dst_sel = 3;
     out_en = 1;
-    #10 out_en = 0;
+    #2
 
+    out_en = 0;
+
+    $display("out = %d", out);
     $display("src = %d", src);
     $display("dst = %d", dst);
 
