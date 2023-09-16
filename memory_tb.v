@@ -8,30 +8,30 @@ module memory_unit_test;
   // Inputs
   reg clk;
   reg rst;
+  reg addr_en;
+  reg [15:0] addr;
   reg in_en;
-  reg [15:0] in_addr;
-  reg [15:0] in_data;
+  reg [15:0] in;
   reg out_en;
-  reg [15:0] out_addr;
 
   // Outputs
-  wire [15:0] out_data;
+  wire [15:0] out;
 
   // Instantiate the memory module
   memory dut (
     .clk(clk),
     .rst(rst),
+    .addr_en(addr_en),
+    .addr(addr),
     .in_en(in_en),
-    .in_addr(in_addr),
-    .in_data(in_data),
+    .in(in),
     .out_en(out_en),
-    .out_addr(out_addr),
-    .out_data(out_data)
+    .out(out)
   );
 
   // Clock generation
   always begin
-    #5 clk = ~clk;
+    #1 clk = ~clk;
   end
 
   // Test stimulus
@@ -39,32 +39,67 @@ module memory_unit_test;
     // Initialize inputs
     clk = 0;
     rst = 1;
+    addr_en = 0;
+    addr = 0;
     in_en = 0;
-    in_addr = 0;
-    in_data = 0;
+    in = 0;
     out_en = 0;
-    out_addr = 0;
 
     // Reset
-    #10 rst = 0;
+    #2 rst = 0;
+    #2
+
+    // set address to 0
+    addr_en = 1;
+    addr = 0;
+    #2;
 
     // Write data to memory
+    addr_en = 0;
     in_en = 1;
-    in_addr = 0;
-    in_data = 16'h1234;
-    #10;
-    in_en = 0;
+    in = 16'h1234;
+    #2;
+
+    // set address to 1
+    addr_en = 1;
+    addr = 1;
+    #2;
+
+    // Write data to memory
+    addr_en = 0;
+    in_en = 1;
+    in = 16'h4321;
+    #2;
+
+    // set address to 0
+    addr_en = 1;
+    addr = 0;
+    #2;
 
     // Read data from memory
+    in_en = 0;
     out_en = 1;
-    out_addr = 0;
-    #10;
+    #2;
     out_en = 0;
 
-    $display("out_data = %h", out_data);
+    $display("out = %h", out);
+    if (out !== 16'h1234)
+      $error("Test failed");
 
+    // set address to 0
+    addr_en = 1;
+    addr = 1;
+    #2;
+
+    // Read data from memory
+    in_en = 0;
+    out_en = 1;
+    #2;
+    out_en = 0;
+
+    $display("out = %h", out);
     // Check expected output
-    if (out_data !== 16'h1234)
+    if (out !== 16'h4321)
       $error("Test failed");
 
     $display("Test passed");

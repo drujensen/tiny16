@@ -15,21 +15,22 @@ module memory (
 
   always @(posedge clk) begin
     if (rst) begin
-      mar = 16'hZZZZ;
+      mar <= 16'hZZZZ;
     end
     if (!rst && !out_en) begin
-      out = 16'hZZZZ;
+      out <= 16'hZZZZ;
     end
     if (!rst && out_en) begin
-      out = mem[mar];
+      out <= mem[mar];
     end
   end
+
   always @(negedge clk) begin
     if (!rst && addr_en) begin
-      mar = addr;
+      mar <= addr;
     end
     if (!rst && in_en) begin
-      mem[mar] = in;
+      mem[mar] <= in;
     end
   end
 endmodule
