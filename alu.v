@@ -58,20 +58,14 @@ module alu (
     if (rst) begin
       result <= 17'b0;
       flags <= 4'b0000;
-    end
-
-  end
-
-  always @(negedge clk) begin
-    if (!rst) begin
+    end else begin
       if (out_en) begin
         out <= result[15:0];
         flags[3] <= (src1[15] == src2[15] && result[15] != src1[15]); // Overflow flag
         flags[2] <= result[16];        // Carry flag
         flags[1] <= result[15];        // Negative flag
         flags[0] <= result[15:0] == 0; // Zero flag
-      end
-      else begin
+      end else begin
         out <= 16'hZZZZ; // Tri-state the output of the wire
       end
     end

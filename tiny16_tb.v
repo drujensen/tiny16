@@ -30,6 +30,7 @@ module tiny16_tb;
         dut.mem.mem[16'b0000] = 16'b0001010100000001;      // LD X2, #1
         dut.mem.mem[16'b0001] = 16'b0001011100000010;      // LD X3, #2
         dut.mem.mem[16'b0010] = 16'b0011010000110000;      // ADD X2, X3
+        dut.mem.mem[16'b0011] = 16'b1100000000000011;      // JMP #3
 
         // Wait for reset to be released
         RST <= 1;
@@ -37,9 +38,8 @@ module tiny16_tb;
         RST <= 0;
         #2;
 
-        for (i=0; i<8; i=i+1) begin
-          $display("bus: %h", dut.bus);
-          $display("cnt: %h", dut.ctrl.step.counter);
+        for (i=0; i<16; i=i+1) begin
+          $display("stp: %h", dut.ctrl.step.counter);
           $display("ins: %h", dut.ctrl.in);
           $display("opc: %h", dut.ctrl.opcode);
           $display("ade: %h", dut.mem_addr_en);

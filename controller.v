@@ -20,17 +20,27 @@ module controller (
 );
 
   wire [2:0] counter;
-  reg [15:0] in_reg;
+  reg [15:0] reg_in;
   reg [3:0] alu_flags;
-  reg [3:0] opcode;
-  reg [11:0] jmpdst;
-  reg [3:0] syscode;
-  reg [8:0] val;
-  reg imm;
-  reg [2:0] dst;
-  reg ind;
-  reg [2:0] src;
-  reg [4:0] off;
+  wire [3:0] opcode;
+  wire [3:0] syscode;
+  wire [11:0] jmpdst;
+  wire [2:0] dst;
+  wire imm;
+  wire [7:0] val;
+  wire ind;
+  wire [2:0] src;
+  wire [3:0] off;
+
+  assign opcode = reg_in[15:12];
+  assign syscode = reg_in[11:8];
+  assign jmpdst = reg_in[11:0];
+  assign dst = reg_in[11:9];
+  assign imm = reg_in[8];
+  assign val = reg_in[7:0];
+  assign ind = reg_in[7];
+  assign src = reg_in[6:4];
+  assign off = reg_in[3:0];
 
   reg step_reset = 0;
 
@@ -39,6 +49,17 @@ module controller (
    .rst(rst || step_reset),
    .counter(counter)
   );
+
+  always @(negedge clk) begin
+    case (counter)
+      0 : begin
+        reg_in <= 16'hZZZZ;
+      end
+      1 : begin
+        reg_in <= in;
+      end
+    endcase
+  end
 
   always @(posedge clk) begin
     // Reset all signals
@@ -54,26 +75,17 @@ module controller (
     reg_out_en <= 0;
     reg_pc_inc <= 0;
     step_reset <= 0;
-    step_next <= 0;
     out <= 16'hZZZZ;
 
     case (counter)
       0 : begin
-        mem_addr_en <= 1;
         reg_src_sel <= 3'b000;
         reg_out_en <= 1;
+        mem_addr_en <= 1;
       end
       1 : begin
         mem_out_en <= 1;
-        opcode <= in[15:12];
-        syscode <= in[11:8];
-        jmpdst <= in[11:0];
-        dst <= in[11:9];
-        imm <= in[8];
-        val <= in[7:0];
-        ind <= in[7];
-        src <= in[6:4];
-        off <= in[3:0];
+        reg_pc_inc <= 1;
       end
       default: begin
         case (opcode)

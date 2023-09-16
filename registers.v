@@ -16,35 +16,34 @@ module registers (
 
   always @(posedge clk) begin
     if (rst) begin
-      {src, dst} = 16'h0000;
-      gpr[0] = 16'h0000;
-      gpr[1] = 16'hFFFF;
-      gpr[2] = 16'h0000;
-      gpr[3] = 16'h0000;
-      gpr[4] = 16'h0000;
-      gpr[5] = 16'h0000;
-      gpr[6] = 16'h0000;
-      gpr[7] = 16'h0000;
-    end
-    else begin
-      src = gpr[src_sel];
-      dst = gpr[dst_sel];
-    end
-    if (!rst && out_en) begin
-      out = gpr[src_sel];
-    end
-    else begin
-      out = 16'hZZZZ; // Tri-state the output of the register
+      {src, dst} <= 16'h0000;
+      gpr[0] <= 16'h0000;
+      gpr[1] <= 16'hFFFF;
+      gpr[2] <= 16'h0000;
+      gpr[3] <= 16'h0000;
+      gpr[4] <= 16'h0000;
+      gpr[5] <= 16'h0000;
+      gpr[6] <= 16'h0000;
+      gpr[7] <= 16'h0000;
+    end else begin
+      src <= gpr[src_sel];
+      dst <= gpr[dst_sel];
+
+      if (out_en) begin
+        out <= gpr[src_sel];
+      end else begin
+        out <= 16'hZZZZ;
+      end
     end
   end
 
   always @(negedge clk) begin
     if (!rst && in_en) begin
-      gpr[dst_sel] = in;
+      gpr[dst_sel] <= in;
     end
 
     if (!rst && pc_inc) begin
-      gpr[0] = gpr[0] + 1;
+      gpr[0] <= gpr[0] + 1;
     end
   end
 endmodule

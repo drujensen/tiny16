@@ -23,6 +23,8 @@ module memory (
     if (!rst && out_en) begin
       out = mem[mar];
     end
+  end
+  always @(negedge clk) begin
     if (!rst && addr_en) begin
       mar = addr;
     end
