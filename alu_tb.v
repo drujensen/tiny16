@@ -35,12 +35,12 @@ module alu_test;
   // Testbench
   initial begin
     rst <= 1;
-    #4
+    #2
     rst <= 0;
     src1 <= 10;
     src2 <= 5;
     out_en <= 0;
-    #4
+    #2
 
     $display("RST:");
     $display("out = %d", out);
@@ -48,63 +48,63 @@ module alu_test;
 
     opcode <= 4'b0011; // Addition operation
     out_en <= 1;
-    #4
+    #2
 
     $display("ADD:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b0100; // Subtraction operation
-    #4
+    #2
 
     $display("SUB:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b0101; // Multiplication operation
-    #4
+    #2
 
     $display("MUL:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b0110; // Division operation
-    #4
+    #2
 
     $display("DIV:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b0111; // AND operation
-    #4
+    #2
 
     $display("AND:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b1000; // OR operation
-    #4
+    #2
 
     $display("OR:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b1001; // XOR operation
-    #4
+    #2
 
     $display("XOR:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b1010; // SHL operation
-    #4
+    #2
 
     $display("SHL:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
     opcode <= 4'b1011; // SHR operation
-    #4
+    #2
 
     $display("SHR:");
     $display("out = %d", out);
@@ -112,7 +112,7 @@ module alu_test;
 
     opcode <= 4'b1010; // ROL operation
     ar_flag <= 1'b1;
-    #4
+    #2
 
     $display("ROL:");
     $display("out = %d", out);
@@ -120,12 +120,12 @@ module alu_test;
 
     opcode <= 4'b1011; // ROR operation
     ar_flag <= 1'b1;
-    #4
+    #2
 
     $display("ROR:");
     $display("out = %d", out);
     $display("flags = %b", flags);
 
-    #4 $finish;
+    #2 $finish;
   end
 endmodule

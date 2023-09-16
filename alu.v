@@ -10,64 +10,33 @@ module alu (
   output reg [3:0] flags //O C N Z
 );
 
-  reg [16:0] result;
+  wire [16:0] result;
+
+  assign result = (opcode == 4'b0011) ? src1 + src2 : // Addition
+                  (opcode == 4'b0100) ? src1 - src2 : // Subtraction
+                  (opcode == 4'b0101) ? src1 * src2 : // Multiplication
+                  (opcode == 4'b0110) ? src1 / src2 : // Division
+                  (opcode == 4'b0111) ? src1 & src2 : // Bitwise AND
+                  (opcode == 4'b1000) ? src1 | src2 : // Bitwise OR
+                  (opcode == 4'b1001) ? src1 ^ src2 : // Bitwise XOR
+                  (opcode == 4'b1010) ? (ar_flag ? src1 <<< src2 : src1 << src2) : // Shift left or rotate left
+                  (opcode == 4'b1011) ? (ar_flag ? src1 >>> src2 : src1 >> src2) : // Shift right or rotate right
+                  17'b0; // Default
 
   always @(posedge clk) begin
-    case(opcode)
-      // Addition
-      4'b0011 : result <= src1 + src2;
-
-      // Subtraction
-      4'b0100 : result <= src1 - src2;
-
-      // Multiplication
-      4'b0101 : result <= src1 * src2;
-
-      // Division
-      4'b0110 : result <= src1 / src2;
-
-      // Bitwise AND
-      4'b0111 : result <= src1 & src2;
-
-      // Bitwise OR
-      4'b1000 : result <= src1 | src2;
-
-      // Bitwise XOR
-      4'b1001 : result <= src1 ^ src2;
-
-      // Shift left or rotate left
-      4'b1010 : begin
-        if (ar_flag == 1'b1)
-          result <= src1 <<< src2;
-        else
-          result <= src1 << src2;
-      end
-
-      // Shift right or rotate right
-      4'b1011 : begin
-        if (ar_flag == 1'b1)
-          result <= src1 >>> src2;
-        else
-          result <= src1 >> src2;
-      end
-
-      // Default
-      default : result <= 0;
-    endcase
-
     if (rst) begin
-      result <= 17'b0;
+      out <= 16'hZZZZ;
       flags <= 4'b0000;
-    end else begin
-      if (out_en) begin
-        out <= result[15:0];
-        flags[3] <= (src1[15] == src2[15] && result[15] != src1[15]); // Overflow flag
-        flags[2] <= result[16];        // Carry flag
-        flags[1] <= result[15];        // Negative flag
-        flags[0] <= result[15:0] == 0; // Zero flag
-      end else begin
-        out <= 16'hZZZZ; // Tri-state the output of the wire
-      end
+    end
+    else if (out_en) begin
+      out <= result[15:0];
+      flags[3] <= (src1[15] == src2[15] && result[15] != src1[15]); // Overflow flag
+      flags[2] <= result[16];        // Carry flag
+      flags[1] <= result[15];        // Negative flag
+      flags[0] <= result[15:0] == 0; // Zero flag
+    end
+    else begin
+      out <= 16'hZZZZ; // Tri-state the output of the wire
     end
   end
 endmodule
