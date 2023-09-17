@@ -46,7 +46,7 @@ module controller (
 
   step step (
    .clk(clk),
-   .rst(rst || step_reset),
+   .rst(rst | step_reset),
    .counter(counter)
   );
 

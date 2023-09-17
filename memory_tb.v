@@ -38,7 +38,6 @@ module memory_unit_test;
   initial begin
     // Initialize inputs
     clk = 0;
-    rst = 1;
     addr_en = 0;
     addr = 0;
     in_en = 0;
@@ -46,7 +45,9 @@ module memory_unit_test;
     out_en = 0;
 
     // Reset
-    #2 rst = 0;
+    rst = 1;
+    #2
+    rst = 0;
     #2
 
     // set address to 0

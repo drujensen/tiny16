@@ -34,7 +34,7 @@ module tiny16_tb;
 
         // Wait for reset to be released
         RST <= 1;
-        #4
+        #2
         RST <= 0;
         #2;
 
