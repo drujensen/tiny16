@@ -16,6 +16,7 @@ module controller (
   output reg reg_in_en,
   output reg reg_out_en,
   output reg reg_pc_inc,
+  output reg ctl_out_en,
   output reg [15:0] out
 );
 
@@ -64,19 +65,20 @@ module controller (
     reg_out_en <= 0;
     reg_pc_inc <= 0;
     step_reset <= 0;
+    ctl_out_en <= 0;
     out <= 16'hZZZZ;
 
     case (counter)
       0 : begin
         reg_in <= 16'hZZZZ;
-        reg_src_sel <= 3'b000;
-        reg_out_en <= 1;
-        mem_addr_en <= 1;
+        reg_src_sel <= 3'b000; //program counter
+        reg_out_en <= 1;  //send pc to bus
+        mem_addr_en <= 1; //send bus to memory address
       end
       1 : begin
-        mem_out_en <= 1;
-        reg_in <= in;
-        reg_pc_inc <= 1;
+        mem_out_en <= 1; //send memory to bus
+        reg_in <= in; //send bus to register
+        reg_pc_inc <= 1; //increment program counter
       end
       default: begin
         case (opcode)
@@ -113,6 +115,7 @@ module controller (
             reg_src_sel <= src;
             reg_dst_sel <= dst;
             if (imm) begin
+              ctl_out_en <= 1;
               out <= val;
               reg_in_en <= 1;
               step_reset <= 1;
@@ -148,6 +151,7 @@ module controller (
               case (counter)
                 2 : begin
                   out <= val;
+                  ctl_out_en <= 1;
                   reg_in_en <= 1;
                   reg_src_sel <= 3'b111;
                 end
@@ -217,6 +221,7 @@ module controller (
           end
           12 : begin // JMP
             out <= jmpdst[11:0];
+            ctl_out_en <= 1;
             reg_dst_sel <= 3'b000;
             reg_in_en <= 1;
             step_reset <= 1;
@@ -231,6 +236,7 @@ module controller (
               end
               3 : begin
                 out <= jmpdst[11:0];
+                ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
                 reg_in_en <= 1;
                 step_reset <= 1;
@@ -245,6 +251,7 @@ module controller (
               case (counter)
                 2 : begin
                   out <= val;
+                  ctl_out_en <= 1;
                   reg_in_en <= 1;
                   reg_src_sel <= 3'b111;
                 end
@@ -289,6 +296,7 @@ module controller (
                 reg_dst_sel <= 3'b000;
                 if (imm) begin
                   out <= val;
+                  ctl_out_en <= 1;
                   reg_in_en <= 1;
                   step_reset <= 1;
                 end else if (ind) begin

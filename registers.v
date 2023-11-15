@@ -14,11 +14,11 @@ module registers (
 
   reg [15:0] gpr[0:7];
 
-  always @(posedge clk or posedge rst) begin
+  always @(posedge clk) begin
     if (rst) begin
       {src, dst} <= 16'h0000;
       gpr[0] <= 16'h0000;
-      gpr[1] <= 16'hFFFF;
+      gpr[1] <= 16'h00FF;
       gpr[2] <= 16'h0000;
       gpr[3] <= 16'h0000;
       gpr[4] <= 16'h0000;

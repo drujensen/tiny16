@@ -26,12 +26,6 @@ module tiny16_tb;
         $dumpfile("tiny16.vcd");
         $dumpvars(0, dut);
 
-        // Populate memory
-        dut.mem.mem[16'b0000] = 16'b0001010100000001;      // LD X2, #1
-        dut.mem.mem[16'b0001] = 16'b0001011100000010;      // LD X3, #2
-        dut.mem.mem[16'b0010] = 16'b0011010000110000;      // ADD X2, X3
-        dut.mem.mem[16'b0011] = 16'b1100000000000011;      // JMP #3
-
         // Wait for reset to be released
         RST <= 1;
         #2;

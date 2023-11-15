@@ -9,19 +9,16 @@ module memory (
   output reg [15:0] out
 );
 
-  parameter MEM_SIZE = 65536;
+  parameter MEM_SIZE = 256;
   reg [15:0] mar;
-  reg [15:0] mem [0:MEM_SIZE-1];
+  reg [7:0] mem [0:MEM_SIZE-1];
 
-  always @(posedge clk or posedge rst) begin
+  always @(posedge clk) begin
     if (rst) begin
       mar <= 16'hZZZZ;
     end
-    if (!rst && !out_en) begin
-      out <= 16'hZZZZ;
-    end
     if (!rst && out_en) begin
-      out <= mem[mar];
+      out <= 8'h0 + mem[mar[7:0]];
     end
     if (!rst && addr_en) begin
       mar <= addr;
@@ -29,5 +26,9 @@ module memory (
     if (!rst && in_en) begin
       mem[mar] <= in;
     end
+  end
+
+  initial begin
+    $readmemh("memory.mem", mem);
   end
 endmodule
