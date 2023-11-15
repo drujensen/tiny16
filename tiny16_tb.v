@@ -6,7 +6,7 @@ module tiny16_tb;
     reg RST = 0;
     wire [15:0] OUT;
     wire USBPU;
-    integer i = 0;
+    integer idx;
 
     // Instantiate the DUT (Design Under Test)
     tiny16 dut (
@@ -23,9 +23,9 @@ module tiny16_tb;
 
     // Test stimulus
     initial begin
-        // Initialize inputs
-        // Perform test operations
-        // Write test code here
+        $dumpfile("tiny16.vcd");
+        $dumpvars(0, dut);
+
         // Populate memory
         dut.mem.mem[16'b0000] = 16'b0001010100000001;      // LD X2, #1
         dut.mem.mem[16'b0001] = 16'b0001011100000010;      // LD X3, #2
@@ -34,30 +34,14 @@ module tiny16_tb;
 
         // Wait for reset to be released
         RST <= 1;
-        #2
+        #2;
         RST <= 0;
         #2;
 
-        for (i=0; i<16; i=i+1) begin
-          $display("stp: %h", dut.ctrl.step.counter);
-          $display("ins: %h", dut.ctrl.in);
-          $display("opc: %h", dut.ctrl.opcode);
-          $display("ade: %h", dut.mem_addr_en);
-          $display("reg: %h", dut.regs.out);
-          $display(" X0: %h", dut.regs.gpr[0]);
-          $display(" X1: %h", dut.regs.gpr[1]);
-          $display(" X2: %h", dut.regs.gpr[2]);
-          $display(" X3: %h", dut.regs.gpr[3]);
-          $display(" X4: %h", dut.regs.gpr[4]);
-          $display(" X5: %h", dut.regs.gpr[5]);
-          $display("adr: %h", dut.mem.addr);
-          $display("mem: %h", dut.mem.out);
-          $display("alu: %h", dut.alu.out);
-          $display("---------------------------");
-          #2;
-        end
+        #64;
 
         // End simulation
+        $display("Simulation complete");
         #2 $finish;
     end
 endmodule

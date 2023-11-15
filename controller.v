@@ -51,17 +51,6 @@ module controller (
   );
 
   always @(negedge clk) begin
-    case (counter)
-      0 : begin
-        reg_in <= 16'hZZZZ;
-      end
-      1 : begin
-        reg_in <= in;
-      end
-    endcase
-  end
-
-  always @(posedge clk) begin
     // Reset all signals
     alu_opcode <= 4'b0000;
     alu_out_en <= 0;
@@ -79,12 +68,14 @@ module controller (
 
     case (counter)
       0 : begin
+        reg_in <= 16'hZZZZ;
         reg_src_sel <= 3'b000;
         reg_out_en <= 1;
         mem_addr_en <= 1;
       end
       1 : begin
         mem_out_en <= 1;
+        reg_in <= in;
         reg_pc_inc <= 1;
       end
       default: begin

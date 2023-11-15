@@ -23,7 +23,7 @@ module alu (
                   (opcode == 4'b1011) ? (ar_flag ? src1 >>> src2 : src1 >> src2) : // Shift right or rotate right
                   17'b0; // Default
 
-  always @(posedge clk) begin
+  always @(posedge clk or posedge rst) begin
     if (rst) begin
       out <= 16'hZZZZ;
       flags <= 4'b0000;

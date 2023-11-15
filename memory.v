@@ -13,7 +13,7 @@ module memory (
   reg [15:0] mar;
   reg [15:0] mem [0:MEM_SIZE-1];
 
-  always @(posedge clk) begin
+  always @(posedge clk or posedge rst) begin
     if (rst) begin
       mar <= 16'hZZZZ;
     end
@@ -23,9 +23,6 @@ module memory (
     if (!rst && out_en) begin
       out <= mem[mar];
     end
-  end
-
-  always @(negedge clk) begin
     if (!rst && addr_en) begin
       mar <= addr;
     end

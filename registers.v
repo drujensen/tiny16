@@ -14,7 +14,7 @@ module registers (
 
   reg [15:0] gpr[0:7];
 
-  always @(posedge clk) begin
+  always @(posedge clk or posedge rst) begin
     if (rst) begin
       {src, dst} <= 16'h0000;
       gpr[0] <= 16'h0000;
@@ -35,9 +35,6 @@ module registers (
         out <= 16'hZZZZ;
       end
     end
-  end
-
-  always @(negedge clk) begin
     if (!rst && in_en) begin
       gpr[dst_sel] <= in;
     end
