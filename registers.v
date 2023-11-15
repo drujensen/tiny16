@@ -32,7 +32,7 @@ module registers (
       if (out_en) begin
         out <= gpr[src_sel];
       end else begin
-        out <= 16'hZZZZ;
+        out <= 16'h0000;
       end
     end
     if (!rst && in_en) begin

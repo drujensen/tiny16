@@ -3,21 +3,28 @@
 The Tiny16 computer is a 16bit system built on the TinyFPGA B-Series.  The system
 has similar capabilites as a C6502 8bit system.
 
-The computer can support 64KB of RAM and has a 16bit bus and instruction set.
+The computer can support 128KB of RAM and has a 16bit bus and instruction set.  memory is 16bit per address location instead of 8bit. This keeps the system 16bit aligned with no special handling.  everything is 16bits.
 
 ## Instruction Set Architecture
 
 The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed width commands.
 
-OPCODE (4-bit)
-System:
-0 SYS
+### System Instructions
+ | OPCODE (4) | SYSCODE (4) | Description |
+ | 0 SYS | 0 NOP | No Operation |
+ | 0 SYS | 1 IN  | input from keyboard |
+ | 0 SYS | 2 OUT | output to display |
+ | 0 SYS | 3 SET | set register |
+ | 0 SYS | 4 CLR | clear register |
+ | 0 SYS | 14 INT | interrupt handler |
+ | 0 SYS | 15 HLT | halt cpu |
 
-Memory:
+
+### Memory Instructions
 1 ST
 2 LD
 
-Arithmetic/Logic:
+### Arithmetic/Logic Instructions
 3 ADD
 4 SUB
 5 MUL
@@ -28,28 +35,21 @@ Arithmetic/Logic:
 A SL
 B SR
 
-Branch:
+### Branch Instructions
 C JMP
 D JSR
 E CMP
 F BR
 
-If System:
-  SYS CODE (4-bit)
-  0 NOP
-  1 SET
-  2 CLR
-  ...
-  E BRK
-  F HLT
 
 If Memory/Arithmetic/Logic:
+  
+  DESTINATION (3-bit)
+  x0:x7 - destination register
+
   IMMEDIATE (1-bit)
   0 - register
   1 - immediate
-
-  DESTINATION (3-bit)
-  x0:x7 - destination register
 
   IF IMMEDIATE:
     VALUE (8-bit)
@@ -57,8 +57,8 @@ If Memory/Arithmetic/Logic:
 
   ELSE:
     DIRECT (1-bit)
-    0 - Indirect - Deref pointer
-    1 - Direct
+    0 - Direct
+    1 - Indirect - Deref pointer
 
     SOURCE (3-bt)
     x0:x7 - Register

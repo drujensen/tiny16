@@ -17,6 +17,7 @@ module controller (
   output reg reg_out_en,
   output reg reg_pc_inc,
   output reg ctl_out_en,
+  output reg dsp_in_en,
   output reg [15:0] out
 );
 
@@ -66,11 +67,12 @@ module controller (
     reg_pc_inc <= 0;
     step_reset <= 0;
     ctl_out_en <= 0;
-    out <= 16'hZZZZ;
+    dsp_in_en <= 0;
+    out <= 16'h0000;
 
     case (counter)
       0 : begin
-        reg_in <= 16'hZZZZ;
+        reg_in <= 16'h0000;
         reg_src_sel <= 3'b000; //program counter
         reg_out_en <= 1;  //send pc to bus
         mem_addr_en <= 1; //send bus to memory address
@@ -93,12 +95,29 @@ module controller (
                 step_reset <= 1;
               end
               2 : begin // OUT
+                reg_src_sel <= src;
+                if (ind) begin
+                  case (counter)
+                    3 : begin
+                      reg_out_en <= 1;
+                      mem_addr_en <= 1;
+                    end
+                    4 : begin
+                      mem_out_en <= 1;
+                      dsp_in_en <= 1;
+                      step_reset <= 1;
+                    end
+                  endcase
+                end else begin
+                  reg_out_en <= 1;
+                  dsp_in_en <= 1;
+                  step_reset <= 1;
+                end
+              end
+              3 : begin // SET
                 step_reset <= 1;
               end
-              3 : begin // PUSH
-                step_reset <= 1;
-              end
-              4 : begin // POP
+              4 : begin // CLR
                 step_reset <= 1;
               end
               //...

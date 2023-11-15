@@ -3,6 +3,7 @@
 `include "alu.v"
 `include "controller.v"
 `include "bus.v"
+`include "display.v"
 
 module tiny16 (
     input  CLK,            // 16MHz clock
@@ -94,6 +95,7 @@ module tiny16 (
         .reg_out_en(reg_out_en),
         .reg_pc_inc(reg_pc_inc),
         .ctl_out_en(ctl_out_en),
+        .dsp_in_en(dsp_in_en),
         .out(ctl_out)
     );
 
@@ -113,5 +115,17 @@ module tiny16 (
         .out(bus_out)
     );
 
-    assign OUT = bus_out;
+
+    wire dsp_in_en;
+    wire [15:0] dsp_out;
+
+    display dsp (
+        .clk(CLK),
+        .rst(RST),
+        .in_en(dsp_in_en),
+        .in(bus_out),
+        .out(dsp_out)
+    );
+
+    assign OUT = dsp_out;
 endmodule

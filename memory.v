@@ -15,7 +15,7 @@ module memory (
 
   always @(posedge clk) begin
     if (rst) begin
-      mar <= 16'hZZZZ;
+      mar <= 16'h0000;
     end
     if (!rst && out_en) begin
       out <= mem[mar];

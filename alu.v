@@ -25,7 +25,7 @@ module alu (
 
   always @(posedge clk or posedge rst) begin
     if (rst) begin
-      out <= 16'hZZZZ;
+      out <= 16'h0000;
       flags <= 4'b0000;
     end
     else if (out_en) begin
@@ -36,7 +36,7 @@ module alu (
       flags[0] <= result[15:0] == 0; // Zero flag
     end
     else begin
-      out <= 16'hZZZZ; // Tri-state the output of the wire
+      out <= 16'h0000; // Tri-state the output of the wire
     end
   end
 endmodule
