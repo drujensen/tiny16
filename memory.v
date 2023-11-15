@@ -6,19 +6,18 @@ module memory (
   input in_en,
   input [15:0] in,
   input out_en,
-  output reg [15:0] out
+  output [15:0] out
 );
 
   parameter MEM_SIZE = 256;
   reg [15:0] mar;
   reg [15:0] mem [0:MEM_SIZE-1];
 
+  assign out = mem[mar];
+
   always @(posedge clk) begin
     if (rst) begin
       mar <= 16'h0000;
-    end
-    if (!rst && out_en) begin
-      out <= mem[mar];
     end
     if (!rst && addr_en) begin
       mar <= addr;

@@ -24,6 +24,15 @@ module tiny16_tb;
     // Test stimulus
     initial begin
         $dumpfile("tiny16.vcd");
+        $dumpvars(0, dut.regs.gpr[0], 
+                     dut.regs.gpr[1],
+                     dut.regs.gpr[2],
+                     dut.regs.gpr[3],
+                     dut.regs.gpr[4],
+                     dut.regs.gpr[5],
+                     dut.regs.gpr[6],
+                     dut.regs.gpr[7]
+                  );
         $dumpvars(0, dut);
 
         // Wait for reset to be released

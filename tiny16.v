@@ -115,7 +115,6 @@ module tiny16 (
         .out(bus_out)
     );
 
-
     wire dsp_in_en;
     wire [15:0] dsp_out;
 

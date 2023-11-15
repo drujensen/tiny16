@@ -37,7 +37,7 @@ prog: $(PROJ).bin
 	tinyprog -p $<
 
 clean:
-	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).bin $(PROJ).tb
+	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).bin $(PROJ).tb $(PROJ).vcd
 
 .SECONDARY:
 .PHONY: all prog clean
