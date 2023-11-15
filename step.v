@@ -4,7 +4,7 @@ module step (
   input step_reset,
   output reg [2:0] counter
 );
-  always @(posedge clk) begin
+  always @(negedge clk) begin
     if (rst) begin
       counter <= 3'b0;
     end else begin

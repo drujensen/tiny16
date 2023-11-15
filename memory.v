@@ -11,14 +11,14 @@ module memory (
 
   parameter MEM_SIZE = 256;
   reg [15:0] mar;
-  reg [7:0] mem [0:MEM_SIZE-1];
+  reg [15:0] mem [0:MEM_SIZE-1];
 
   always @(posedge clk) begin
     if (rst) begin
       mar <= 16'hZZZZ;
     end
     if (!rst && out_en) begin
-      out <= 8'h0 + mem[mar[7:0]];
+      out <= mem[mar];
     end
     if (!rst && addr_en) begin
       mar <= addr;

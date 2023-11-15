@@ -32,7 +32,7 @@ module tiny16_tb;
         RST <= 0;
         #2;
 
-        #64;
+        #256;
 
         // End simulation
         $display("Simulation complete");

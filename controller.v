@@ -77,8 +77,10 @@ module controller (
       end
       1 : begin
         mem_out_en <= 1; //send memory to bus
-        reg_in <= in; //send bus to register
         reg_pc_inc <= 1; //increment program counter
+      end
+      2 : begin
+        reg_in <= in; //send bus to register
       end
       default: begin
         case (opcode)
@@ -122,11 +124,11 @@ module controller (
             end else begin
               if (ind) begin
                 case (counter)
-                  2 : begin
+                  3 : begin
                     mem_addr_en <= 1;
                     reg_out_en <= 1;
                   end
-                  3 : begin
+                  4 : begin
                     mem_out_en <= 1;
                     reg_in_en <= 1;
                     step_reset <= 1;
@@ -149,13 +151,13 @@ module controller (
             reg_dst_sel <= dst;
             if (imm) begin
               case (counter)
-                2 : begin
+                3 : begin
                   out <= val;
                   ctl_out_en <= 1;
                   reg_in_en <= 1;
                   reg_src_sel <= 3'b111;
                 end
-                3 : begin
+                4 : begin
                   alu_opcode <= opcode;
                   alu_out_en <= 1;
                   reg_in_en <= 1;
@@ -165,16 +167,16 @@ module controller (
             end else begin
               if (ind) begin
                 case (counter)
-                  2 : begin
+                  3 : begin
                     mem_addr_en <= 1;
                     reg_out_en <= 1;
                   end
-                  3 : begin
+                  4 : begin
                     mem_out_en <= 1;
                     reg_src_sel <= 3'b111;
                     reg_in_en <= 1;
                   end
-                  4: begin
+                  5: begin
                     alu_opcode <= opcode;
                     alu_out_en <= 1;
                     reg_in_en <= 1;
@@ -194,16 +196,16 @@ module controller (
             reg_dst_sel <= dst;
             if (ind) begin
               case (counter)
-                2 : begin
+                3 : begin
                   mem_addr_en <= 1;
                   reg_out_en <= 1;
                 end
-                3 : begin
+                4 : begin
                   mem_out_en <= 1;
                   reg_src_sel <= 3'b111;
                   reg_in_en <= 1;
                 end
-                4 : begin
+                5 : begin
                   alu_opcode <= opcode;
                   alu_ar_flag <= imm;
                   alu_out_en <= 1;
@@ -228,13 +230,13 @@ module controller (
           end
           13 : begin // JSR
             case (counter)
-              2 : begin
+              3 : begin
                 reg_src_sel <= 3'b000;
                 reg_out_en <= 1;
                 reg_dst_sel <= 3'b001;
                 reg_in_en <= 1;
               end
-              3 : begin
+              4 : begin
                 out <= jmpdst[11:0];
                 ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
@@ -249,13 +251,13 @@ module controller (
             alu_opcode <= 4'b0100;
             if (imm) begin
               case (counter)
-                2 : begin
+                3 : begin
                   out <= val;
                   ctl_out_en <= 1;
                   reg_in_en <= 1;
                   reg_src_sel <= 3'b111;
                 end
-                3 : begin
+                4 : begin
                   alu_out_en <= 1;
                   step_reset <= 1;
                 end
@@ -263,16 +265,16 @@ module controller (
             end else begin
               if (ind) begin
                 case (counter)
-                  2 : begin
+                  3 : begin
                     mem_addr_en <= 1;
                     reg_out_en <= 1;
                   end
-                  3 : begin
+                  4 : begin
                     mem_out_en <= 1;
                     reg_src_sel <= 3'b111;
                     reg_in_en <= 1;
                   end
-                  4 : begin
+                  5 : begin
                     alu_out_en <= 1;
                     step_reset <= 1;
                   end
@@ -301,11 +303,11 @@ module controller (
                   step_reset <= 1;
                 end else if (ind) begin
                   case (counter)
-                    2 : begin
+                    3 : begin
                       mem_addr_en <= 1;
                       reg_out_en <= 1;
                     end
-                    3 : begin
+                    4 : begin
                       mem_out_en <= 1;
                       reg_in_en <= 1;
                       step_reset <= 1;
