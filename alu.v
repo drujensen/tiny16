@@ -25,7 +25,7 @@ module alu (
 
   assign out = result[15:0];
  
-  always @(posedge rst) begin
+  always @(negedge rst) begin
     flags <= 4'b0000;
   end
   always @(posedge clk) begin

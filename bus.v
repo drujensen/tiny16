@@ -12,7 +12,8 @@ module bus (
   output [15:0] out
 );
 
-  assign out = alu_out_en ? alu_out :
+  assign out = rst ? 16'h0000 :
+               alu_out_en ? alu_out :
                mem_out_en ? mem_out :
                reg_out_en ? reg_out :
                ctl_out_en ? ctl_out :

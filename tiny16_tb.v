@@ -43,11 +43,10 @@ module tiny16_tb;
 
         // simulate reset
         RST <= 1;
-        #2;
+        #8;
         RST <= 0;
-        #2;
 
-        #255;
+        #4096;
 
         // End simulation
         $display("Simulation complete");

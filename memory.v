@@ -15,7 +15,7 @@ module memory (
 
   assign out = mem[mar];
 
-  always @(posedge rst) begin
+  always @(negedge rst) begin
     mar <= 16'h0000;
     mem[0] <= 16'h1500;
     mem[1] <= 16'h1701;
@@ -23,6 +23,7 @@ module memory (
     mem[3] <= 16'h0220;
     mem[4] <= 16'hc002;
   end
+
   always @(posedge clk) begin
     if (addr_en) begin
       mar <= addr;

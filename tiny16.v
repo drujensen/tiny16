@@ -16,7 +16,6 @@ module tiny16 (
     // drive USB pull-up resistor to '0' to disable USB
     assign USBPU = 0;
 
-
     wire clk_1mhz;
 
     // instantiate the clock divider module
@@ -26,9 +25,6 @@ module tiny16 (
         .clk_1mhz(clk_1mhz)
     );
 
-    wire rst;
-    assign rst = RST;
-
     wire mem_addr_en;
     wire mem_in_en;
     wire mem_out_en;
@@ -37,7 +33,7 @@ module tiny16 (
     // instantiate the memory module
     memory mem (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .addr_en(mem_addr_en),
         .addr(bus_out),
         .in_en(mem_in_en),
@@ -58,7 +54,7 @@ module tiny16 (
     // instantiate the registers module
     registers regs (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .src_sel(reg_src_sel),
         .dst_sel(reg_dst_sel),
         .in_en(reg_in_en),
@@ -79,7 +75,7 @@ module tiny16 (
     // instantiate the alu module
     alu alu (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .opcode(alu_opcode),
         .ar_flag(alu_ar_flag),
         .src1(src),
@@ -95,7 +91,7 @@ module tiny16 (
     // instantiate the controller module
     controller ctrl (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .in(bus_out),
         .flags(alu_flags),
         .alu_opcode(alu_opcode),
@@ -118,7 +114,7 @@ module tiny16 (
 
     bus bs (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .alu_out_en(alu_out_en),
         .alu_out(alu_out),
         .mem_out_en(mem_out_en),
@@ -135,7 +131,7 @@ module tiny16 (
 
     display dsp (
         .clk(clk_1mhz),
-        .rst(rst),
+        .rst(RST),
         .in_en(dsp_in_en),
         .in(bus_out),
         .out(dsp_out)

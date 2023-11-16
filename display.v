@@ -6,9 +6,10 @@ module display (
   output reg [7:0] out
 );
 
-  always @(posedge rst) begin
+  always @(negedge rst) begin
     out <= 0;
   end
+
   always @(posedge clk) begin
     if (in_en) begin
       out <= in[7:0];
