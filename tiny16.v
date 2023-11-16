@@ -8,7 +8,8 @@
 module tiny16 (
     input  CLK,            // 16MHz clock
     input  RST,
-    output [15:0] OUT,     // 16-bit output
+    input  [7:0] IN,     // 8-bit input
+    output [7:0] OUT,     // 8-bit output
     output USBPU           // USB pull-up resistor
 );
     // drive USB pull-up resistor to '0' to disable USB

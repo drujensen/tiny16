@@ -4,7 +4,8 @@ module tiny16_tb;
     // Declare signals and variables
     reg CLK = 0;
     reg RST = 0;
-    wire [15:0] OUT;
+    wire [7:0] IN;
+    wire [7:0] OUT;
     wire USBPU;
     integer idx;
 
@@ -12,6 +13,7 @@ module tiny16_tb;
     tiny16 dut (
         .CLK(CLK),
         .RST(RST),
+        .IN(IN),
         .OUT(OUT),
         .USBPU(USBPU)
     );

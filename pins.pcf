@@ -74,14 +74,14 @@ set_io OUT[7] D2
 set_io PIN_23 B6
 # set_io PIN_24 A6
 
-set_io OUT[8] H9
-set_io OUT[9] D9
-set_io OUT[10] D8
-set_io OUT[11] C9
-set_io OUT[12] A9
-set_io OUT[13] B8
-set_io OUT[14] A8
-set_io OUT[15] B7
+set_io IN[0] H9
+set_io IN[1] D9
+set_io IN[2] D8
+set_io IN[3] C9
+set_io IN[4] A9
+set_io IN[5] B8
+set_io IN[6] A8
+set_io IN[7] B7
 
 set_io RST A6
 
