@@ -4,6 +4,7 @@
 `include "controller.v"
 `include "bus.v"
 `include "display.v"
+`include "clock_divider.v"
 
 module tiny16 (
     input  CLK,            // 16MHz clock
@@ -15,6 +16,19 @@ module tiny16 (
     // drive USB pull-up resistor to '0' to disable USB
     assign USBPU = 0;
 
+
+    wire clk_1mhz;
+
+    // instantiate the clock divider module
+    clock_divider clk_div (
+        .clk(CLK),
+        .rst(RST),
+        .clk_1mhz(clk_1mhz)
+    );
+
+    wire rst;
+    assign rst = RST;
+
     wire mem_addr_en;
     wire mem_in_en;
     wire mem_out_en;
@@ -22,8 +36,8 @@ module tiny16 (
 
     // instantiate the memory module
     memory mem (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .addr_en(mem_addr_en),
         .addr(bus_out),
         .in_en(mem_in_en),
@@ -43,8 +57,8 @@ module tiny16 (
 
     // instantiate the registers module
     registers regs (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .src_sel(reg_src_sel),
         .dst_sel(reg_dst_sel),
         .in_en(reg_in_en),
@@ -64,8 +78,8 @@ module tiny16 (
 
     // instantiate the alu module
     alu alu (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .opcode(alu_opcode),
         .ar_flag(alu_ar_flag),
         .src1(src),
@@ -80,8 +94,8 @@ module tiny16 (
 
     // instantiate the controller module
     controller ctrl (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .in(bus_out),
         .flags(alu_flags),
         .alu_opcode(alu_opcode),
@@ -103,8 +117,8 @@ module tiny16 (
     wire [15:0] bus_out;
 
     bus bs (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .alu_out_en(alu_out_en),
         .alu_out(alu_out),
         .mem_out_en(mem_out_en),
@@ -117,15 +131,15 @@ module tiny16 (
     );
 
     wire dsp_in_en;
-    wire [15:0] dsp_out;
+    wire [7:0] dsp_out;
 
     display dsp (
-        .clk(CLK),
-        .rst(RST),
+        .clk(clk_1mhz),
+        .rst(rst),
         .in_en(dsp_in_en),
         .in(bus_out),
         .out(dsp_out)
     );
 
-    assign OUT = dsp_out[7:0];
+    assign OUT = dsp_out;
 endmodule

@@ -26,11 +26,11 @@ module tiny16_tb;
     // Test stimulus
     initial begin
         // load sample program
-        $readmemh("memory.mem", dut.mem.mem);
-       
+        //$readmemh("memory.mem", dut.mem.mem);
+
         // write to dumpfile
         $dumpfile("tiny16.vcd");
-        $dumpvars(0, dut.regs.gpr[0], 
+        $dumpvars(0, dut.regs.gpr[0],
                      dut.regs.gpr[1],
                      dut.regs.gpr[2],
                      dut.regs.gpr[3],

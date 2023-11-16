@@ -3,7 +3,7 @@ module display (
   input rst,
   input in_en,
   input [15:0] in,
-  output reg [15:0] out
+  output reg [7:0] out
 );
 
   always @(posedge rst) begin
@@ -11,7 +11,7 @@ module display (
   end
   always @(posedge clk) begin
     if (in_en) begin
-      out <= in;
+      out <= in[7:0];
     end
   end
 endmodule
