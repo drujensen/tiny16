@@ -137,5 +137,5 @@ module tiny16 (
         .out(dsp_out)
     );
 
-    assign OUT = dsp_out;
+    assign OUT = RST ? 8'h55 : dsp_out;
 endmodule

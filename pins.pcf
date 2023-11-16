@@ -70,9 +70,12 @@ set_io OUT[7] D2
 # set_io PIN_19 B8
 # set_io PIN_20 A8
 # set_io PIN_21 B7
-# set_io PIN_22 A7
+set_io PIN_22 A7
 set_io PIN_23 B6
 #set_io PIN_24 A6
+
+# RESET
+set_io RST A6 # input
 
 set_io IN[0] H9
 set_io IN[1] D9
@@ -110,6 +113,3 @@ set_io USBPU A3
 
 # 16MHz clock
 set_io --warn-no-port CLK B2 # input
-
-# RESET
-set_io --warn-no-port RST A6 # input
