@@ -6,10 +6,11 @@ module display (
   output reg [15:0] out
 );
 
+  always @(posedge rst) begin
+    out <= 0;
+  end
   always @(posedge clk) begin
-    if (rst) begin
-      out <= 0;
-    end else if (in_en) begin
+    if (in_en) begin
       out <= in;
     end
   end

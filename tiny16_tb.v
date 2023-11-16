@@ -25,6 +25,10 @@ module tiny16_tb;
 
     // Test stimulus
     initial begin
+        // load sample program
+        $readmemh("memory.mem", dut.mem.mem);
+       
+        // write to dumpfile
         $dumpfile("tiny16.vcd");
         $dumpvars(0, dut.regs.gpr[0], 
                      dut.regs.gpr[1],
@@ -37,13 +41,13 @@ module tiny16_tb;
                   );
         $dumpvars(0, dut);
 
-        // Wait for reset to be released
+        // simulate reset
         RST <= 1;
         #2;
         RST <= 0;
         #2;
 
-        #256;
+        #255;
 
         // End simulation
         $display("Simulation complete");

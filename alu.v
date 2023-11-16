@@ -24,12 +24,12 @@ module alu (
                   17'b0; // Default
 
   assign out = result[15:0];
-  
-  always @(posedge clk or posedge rst) begin
-    if (rst) begin
-      flags <= 4'b0000;
-    end
-    else if (out_en) begin
+ 
+  always @(posedge rst) begin
+    flags <= 4'b0000;
+  end
+  always @(posedge clk) begin
+    if (out_en) begin
       flags[3] <= (src1[15] == src2[15] && result[15] != src1[15]); // Overflow flag
       flags[2] <= result[16];        // Carry flag
       flags[1] <= result[15];        // Negative flag

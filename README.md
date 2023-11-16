@@ -21,8 +21,8 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 
 ### Memory Instructions
-1 ST
-2 LD
+1 LD
+2 ST 
 
 ### Arithmetic/Logic Instructions
 3 ADD

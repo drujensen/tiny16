@@ -18,8 +18,7 @@ module registers (
   assign src = gpr[src_sel];
   assign dst = gpr[dst_sel];
 
-  always @(posedge clk) begin
-    if (rst) begin
+  always @(posedge rst) begin
       gpr[0] <= 16'h0000;
       gpr[1] <= 16'h00FF;
       gpr[2] <= 16'h0000;
@@ -28,12 +27,13 @@ module registers (
       gpr[5] <= 16'h0000;
       gpr[6] <= 16'h0000;
       gpr[7] <= 16'h0000;
-    end
-    if (!rst && in_en) begin
+  end
+  always @(posedge clk) begin
+    if (in_en) begin
       gpr[dst_sel] <= in;
     end
 
-    if (!rst && pc_inc) begin
+    if (pc_inc) begin
       gpr[0] <= gpr[0] + 1;
     end
   end
