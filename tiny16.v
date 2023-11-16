@@ -19,7 +19,7 @@ module tiny16 (
     wire clk_1mhz;
 
     // instantiate the clock divider module
-    clock_divider clk_div (
+    clock_divider div (
         .clk(CLK),
         .rst(RST),
         .clk_1mhz(clk_1mhz)
