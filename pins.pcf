@@ -52,14 +52,14 @@ set_io PIN_5 C1
 # set_io PIN_12 J1
 # set_io PIN_13 H2
 
-set_io OUT[0] H2
-set_io OUT[1] J1
-set_io OUT[2] H1
-set_io OUT[3] G2
-set_io OUT[4] E1
-set_io OUT[5] E2
-set_io OUT[6] D1
-set_io OUT[7] D2
+set_io OUT[7] H2
+set_io OUT[6] J1
+set_io OUT[5] H1
+set_io OUT[4] G2
+set_io OUT[3] E1
+set_io OUT[2] E2
+set_io OUT[1] D1
+set_io OUT[0] D2
 
 # Right side of board
 # set_io PIN_14 H9

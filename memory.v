@@ -1,6 +1,6 @@
 module memory (
   input clk,
-  input rst,
+  input rst, // Assuming active-high reset
   input addr_en,
   input [15:0] addr,
   input in_en,
@@ -15,16 +15,16 @@ module memory (
 
   assign out = mem[mar];
 
-  always @(negedge rst) begin
-    mar <= 16'h0000;
-  end
-
-  always @(posedge clk) begin
-    if (addr_en) begin
-      mar <= addr;
-    end
-    if (in_en) begin
-      mem[mar] <= in;
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      mar <= 16'h0000;
+    end else begin
+      if (addr_en) begin
+        mar <= addr;
+      end
+      if (in_en) begin
+        mem[mar] <= in;
+      end
     end
   end
 

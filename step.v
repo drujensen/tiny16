@@ -1,14 +1,14 @@
 module step (
   input clk,
-  input rst,
+  input rst, // Assuming active-high reset
   input step_reset,
   output reg [2:0] counter
 );
-  always @(negedge rst) begin
-    counter <= 3'b0;
-  end
-  always @(negedge clk) begin
-    if (step_reset == 1) begin
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      counter <= 3'b0;
+    end else if (step_reset) begin
       counter <= 3'b0;
     end else begin
       counter <= counter + 1;
