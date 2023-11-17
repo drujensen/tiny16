@@ -34,8 +34,8 @@ module controller (
 
   assign opcode = inst[15:12];
   assign syscode = inst[11:8];
-  assign dst = inst[11:9];
-  assign imm = inst[8];
+  assign imm = inst[11];
+  assign dst = inst[10:8];
   assign ind = inst[7];
   assign src = inst[6:4];
   assign off = inst[3:0];

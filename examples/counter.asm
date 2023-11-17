@@ -1,5 +1,5 @@
-1500 LD x2, #0
-1701 LD x3, #1
-3430 ADD x2, x3
+1A00 LD x2, #0
+1B01 LD x3, #1
+3230 ADD x2, x3
 0220 OUT x2
 C002 JMP #2
