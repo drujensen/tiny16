@@ -11,6 +11,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 ### System Instructions
  | OPCODE (4) | SYSCODE (4) | Description |
+ |------------|-------------|-------------|
  | 0 SYS | 0 NOP | No Operation |
  | 0 SYS | 1 IN  | input from keyboard |
  | 0 SYS | 2 OUT | output to display |
@@ -22,16 +23,22 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 
 ### Memory Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
+|------------|-----------------|---------------|---------------|------------|------------|-------------|
 | 1 LD | x0:x7 | 0 | 0 | x0:x7 | 0:F | Load from memory |
 | 2 ST | x0:x7 | 0 | 0 | x0:x7 | 0:F | Store to memory |
 
 ### Immediate Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | VALUE (8) | Description |
+|------------|-----------------|---------------|------------|-------------|
 | 1 LDI | x0:x7 | 1 | 00:FF | Load from memory |
 
 ### Arithmetic/Logic Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
+|------------|-----------------|---------------|---------------|------------|------------|-------------|
 | 3 ADD | x0:x7 | 0 | 0 | x0:x7 | 0:F | Add |
 | 4 SUB | x0:x7 | 0 | 0 | x0:x7 | 0:F | Subtract |
 | 5 MULT | x0:x7 | 0 | 0 | x0:x7 | 0:F | Multiply |
@@ -43,7 +50,9 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 | B SR | x0:x7 | 0 | 0 | x0:x7 | 0:F | Shift Right |
 
 ### Immediate Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | VALUE (8) | Description |
+|------------|-----------------|---------------|------------|-------------|
 | 3 ADDI | x0:x7 | 1 | 00:FF | Add |
 | 4 SUBI | x0:x7 | 1 | 00:FF | Subtract |
 | 5 MULTI | x0:x7 | 1 | 00:FF | Multiply |
@@ -56,20 +65,28 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 
 ### Branch Instructions
+
 | OPCODE (4) | ADDRESS (12) | Description |
+|---|---------------|-------------|
 | C JMP | 000:8FF | Jump |
 | D JSR | 000:8FF | Jump to Subroutine |
 
 ### Compare Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
+|-------------|-----------------|---------------|---------------|------------|------------|-------------|
 | E CMP | x0:x7 | 0 | 0 | x0:x7 | 0:F | Compare |
 
 ### Immediate Instructions
+
 | OPCODE (4) | DESTINATION (3) | IMMEDIATE (1) | VALUE (8) | Description |
+|----|-----------------|---------------|------------|-------------|
 | E CMPI | x0:x7 | 1 | 00:FF | Compare |
 
 ### Branch Instructions
+
 | OPCODE (4) | COMPARATOR (3) | IMMEDIATE (1) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
+|---|---------------|---------------|---------------|------------|------------|-------------|
 | F BR | 0 ZS (EQ) | 0 | 0 | x0:x7 | 0:F | Branch if Zero Set |
 | F BR | 1 ZC (NE) | 0 | 0 | x0:x7 | 0:F | Branch if Zero Clear |
 | F BR | 2 NS (LT) | 0 | 0 | x0:x7 | 0:F | Branch if Negative Set |
@@ -80,7 +97,9 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 | F BR | 7 OC      | 0 | 0 | x0:x7 | 0:F | Branch if Overflow Clear |
 
 ### Immediate Instructions
+
 | OPCODE (4) | COMPARATOR (3) | IMMEDIATE (1) | VALUE (8) | Description |
+|------------|-----------------|---------------|------------|-------------|
 | F BRI | 0 ZS (EQ) | 1 | 00:FF | Branch if Zero Set |
 | F BRI | 1 ZC (NE) | 1 | 00:FF | Branch if Zero Clear |
 | F BRI | 2 NS (LT) | 1 | 00:FF | Branch if Negative Set |
