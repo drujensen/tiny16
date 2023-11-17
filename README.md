@@ -26,8 +26,8 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
 |------------|---------------|  ---------------|---------------|------------|------------|-------------|
-| 1 LD | x0:x7 | 0 | x0:x7 | 0 | 0:F | Load from memory |
-| 2 ST | x0:x7 | 0 | x0:x7 | 0 | 0:F | Store to memory |
+| 1 LD | 0 | x0:x7 | 0 | x0:x7 | 0:F | Load from memory |
+| 2 ST | 0 | x0:x7 | 0 | x0:x7 | 0:F | Store to memory |
 
 #### Immediate Instructions
 
