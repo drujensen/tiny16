@@ -42,12 +42,13 @@ module controller (
   assign out = (opcode == 12 || opcode == 13) ? inst[11:0] : inst[7:0];
 
   wire step_reset;
+  reg halt = 0;
 
   assign step_reset = (counter == 4) ? 1 : 0;
 
   step step (
    .clk(clk),
-   .rst(rst),
+   .rst(rst | halt),
    .step_reset(step_reset),
    .counter(counter)
   );
@@ -116,6 +117,7 @@ module controller (
               14 : begin // INT
               end
               15 : begin // HLT
+                halt <= 1;
               end
               default: begin
               end
@@ -135,8 +137,8 @@ module controller (
               if (ind) begin
                 case (counter)
                   3 : begin
-                    mem_addr_en <= 1;
                     reg_out_en <= 1;
+                    mem_addr_en <= 1;
                   end
                   4 : begin
                     mem_out_en <= 1;
@@ -178,8 +180,8 @@ module controller (
                 reg_src_sel <= 3'b111;
                 case (counter)
                   3 : begin
-                    mem_addr_en <= 1;
                     reg_out_en <= 1;
+                    mem_addr_en <= 1;
                   end
                   4 : begin
                     alu_out_en <= 1;
@@ -205,8 +207,8 @@ module controller (
               reg_src_sel <= 3'b111;
               case (counter)
                 3 : begin
-                  mem_addr_en <= 1;
                   reg_out_en <= 1;
+                  mem_addr_en <= 1;
                 end
                 4 : begin
                   alu_out_en <= 1;
@@ -254,8 +256,8 @@ module controller (
               case (counter)
                 3 : begin
                   ctl_out_en <= 1;
-                  reg_in_en <= 1;
                   reg_src_sel <= 3'b111;
+                  reg_in_en <= 1;
                 end
                 4 : begin
                   alu_out_en <= 1;
@@ -265,8 +267,8 @@ module controller (
               if (ind) begin
                 case (counter)
                   3 : begin
-                    mem_addr_en <= 1;
                     reg_out_en <= 1;
+                    mem_addr_en <= 1;
                   end
                   4 : begin
                     mem_out_en <= 1;
@@ -307,8 +309,8 @@ module controller (
                 end else if (ind) begin
                   case (counter)
                     3 : begin
-                      mem_addr_en <= 1;
                       reg_out_en <= 1;
+                      mem_addr_en <= 1;
                     end
                     4 : begin
                       mem_out_en <= 1;
