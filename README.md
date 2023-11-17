@@ -114,6 +114,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 ## Registers:
 
 | Register | Label | Description |
+|----------|-------|-------------|
 | 0 | x0 | (PC) Program Counter |
 | 1 | x1 | (SP) Stack Pointer |
 | 2 | x2 | Argument 1 |
