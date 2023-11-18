@@ -25,20 +25,20 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 ### Memory Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|  ---------------|---------------|------------|------------|-------------|
+|------------|---------------|  ---------------|---------------|-----------|------------|-------------|
 | 1 LD | 0 | x0:x7 | 0 | x0:x7 | 0:F | Load from memory |
 | 2 ST | 0 | x0:x7 | 0 | x0:x7 | 0:F | Store to memory |
 
 #### Immediate Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|------------|-------------|
+|------------|---------------|-----------------|-----------|-------------|
 | 1 LDI | 1 | x0:x7 | 00:FF | Load from memory |
 
 ### Arithmetic/Logic Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|  ---------------|---------------|------------|------------|-------------|
+|------------|---------------|  ---------------|--------------|------------|------------|-------------|
 | 3 ADD  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Add |
 | 4 SUB  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Subtract |
 | 5 MULT | 0 | x0:x7 | 0 | x0:x7 | 0:F | Multiply |
@@ -52,7 +52,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 #### Immediate Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|------------|-------------|
+|------------|---------------|-----------------|-----------|-------------|
 | 3 ADDI  | 1 | x0:x7 | 00:FF | Add |
 | 4 SUBI  | 1 | x0:x7 | 00:FF | Subtract |
 | 5 MULTI | 1 | x0:x7 | 00:FF | Multiply |
@@ -69,26 +69,26 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 * Jump is relative to the current instruction pointer.
 
 | OPCODE (4) | DIRECTION (1) | DISTANCE (11) | Description |
-|---|---------------|-------------|
+|------------|---------------|---------------|-------------|
 | C JMP | 0 | 000:4FF | Jump |
 | D JSR | 0 | 000:4FF | Jump to Subroutine |
 
 ### Compare Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|-----------------|---------------|------------|------------|-------------|
+|------------|---------------|-----------------|--------------|------------|------------|-------------|
 | E CMP | 0 | x0:x7 | 0 | x0:x7 | 0:F | Compare |
 
 #### Immediate Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|------------|-------------|
+|------------|---------------|-----------------|-----------|-------------|
 | E CMPI | 1 | x0:x7 | 00:FF | Compare |
 
 ### Branch Instructions
 
 | OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|----------------|---------------|------------|------------|-------------|
+|------------|---------------|----------------|--------------|------------|------------|-------------|
 | F BR | 0 | 0 ZS (EQ) | 0 | x0:x7 | 0:F | Branch if Zero Set |
 | F BR | 0 | 1 ZC (NE) | 0 | x0:x7 | 0:F | Branch if Zero Clear |
 | F BR | 0 | 2 NS (LT) | 0 | x0:x7 | 0:F | Branch if Negative Set |
@@ -103,7 +103,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 * Immediate branching is relative distance from the current instruction pointer.
 
 | OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | DIRECTION (1) | DISTANCE (7) | Description |
-|------------|---------------|----------------|------------|-------------|
+|------------|---------------|----------------|---------------|--------------|-------------|
 | F BRI | 1 | 0 ZS (EQ) | 0 | 00:8F | Branch if Zero Set |
 | F BRI | 1 | 1 ZC (NE) | 0 | 00:8F | Branch if Zero Clear |
 | F BRI | 1 | 2 NS (LT) | 0 | 00:8F | Branch if Negative Set |
