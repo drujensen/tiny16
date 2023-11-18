@@ -78,8 +78,8 @@ module tiny16 (
         .rst(RST),
         .opcode(alu_opcode),
         .ar_flag(alu_ar_flag),
-        .src1(src),
-        .src2(dst),
+        .src1(dst),
+        .src2(src),
         .out_en(alu_out_en),
         .out(alu_out),
         .flags(alu_flags)

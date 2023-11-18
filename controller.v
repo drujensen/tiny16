@@ -164,26 +164,32 @@ module controller (
             reg_dst_sel <= dst;
             alu_opcode <= opcode;
             if (imm) begin
-              reg_src_sel <= 3'b111;
               case (counter)
                 3 : begin
+                  reg_dst_sel <= 3'b111;
                   ctl_out_en <= 1;
                   reg_in_en <= 1;
                 end
                 4 : begin
+                  reg_src_sel <= 3'b111;
                   alu_out_en <= 1;
                   reg_in_en <= 1;
                 end
               endcase
             end else begin
               if (ind) begin
-                reg_src_sel <= 3'b111;
                 case (counter)
                   3 : begin
                     reg_out_en <= 1;
                     mem_addr_en <= 1;
                   end
                   4 : begin
+                    reg_dst_sel <= 3'b111;
+                    mem_out_en <= 1;
+                    reg_in_en <= 1;
+                  end
+                  5 : begin
+                    reg_src_sel <= 3'b111;
                     alu_out_en <= 1;
                     reg_in_en <= 1;
                   end
@@ -204,7 +210,6 @@ module controller (
             alu_opcode <= opcode;
             alu_ar_flag <= imm;
             if (ind) begin
-              reg_src_sel <= 3'b111;
               case (counter)
                 3 : begin
                   reg_out_en <= 1;
@@ -255,11 +260,12 @@ module controller (
             if (imm) begin
               case (counter)
                 3 : begin
+                  reg_dst_sel <= 3'b111;
                   ctl_out_en <= 1;
-                  reg_src_sel <= 3'b111;
                   reg_in_en <= 1;
                 end
                 4 : begin
+                  reg_src_sel <= 3'b111;
                   alu_out_en <= 1;
                 end
               endcase
@@ -271,11 +277,12 @@ module controller (
                     mem_addr_en <= 1;
                   end
                   4 : begin
+                    reg_dst_sel <= 3'b111;
                     mem_out_en <= 1;
-                    reg_src_sel <= 3'b111;
                     reg_in_en <= 1;
                   end
                   5 : begin
+                    reg_src_sel <= 3'b111;
                     alu_out_en <= 1;
                   end
                 endcase
@@ -289,14 +296,14 @@ module controller (
             end
           end
           15 : begin // BR
-            if ((dst == 0 && flags[3]) ||
-                (dst == 1 && ~flags[3]) ||
-                (dst == 2 && flags[2]) ||
-                (dst == 3 && ~flags[2]) ||
-                (dst == 4 && flags[1]) ||
-                (dst == 5 && ~flags[1]) ||
-                (dst == 6 && flags[0]) ||
-                (dst == 7 && ~flags[0])) begin
+            if ((dst == 0 && flags[0]) ||
+                (dst == 1 && ~flags[0]) ||
+                (dst == 2 && flags[1]) ||
+                (dst == 3 && ~flags[1]) ||
+                (dst == 4 && flags[2]) ||
+                (dst == 5 && ~flags[2]) ||
+                (dst == 6 && flags[3]) ||
+                (dst == 7 && ~flags[3])) begin
                 reg_src_sel <= src;
                 reg_dst_sel <= 3'b000;
                 if (imm) begin
