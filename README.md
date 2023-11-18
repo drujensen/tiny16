@@ -66,10 +66,12 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 ### Branch Instructions
 
-| OPCODE (4) | ADDRESS (12) | Description |
+* Jump is relative to the current instruction pointer.
+
+| OPCODE (4) | DIRECTION (1) | DISTANCE (11) | Description |
 |---|---------------|-------------|
-| C JMP | 000:8FF | Jump |
-| D JSR | 000:8FF | Jump to Subroutine |
+| C JMP | 0 | 000:4FF | Jump |
+| D JSR | 0 | 000:4FF | Jump to Subroutine |
 
 ### Compare Instructions
 
@@ -98,18 +100,21 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 #### Immediate Instructions
 
-| OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | VALUE (8) | Description |
-|------------|---------------|----------------|------------|-------------|
-| F BRI | 1 | 0 ZS (EQ) | 00:FF | Branch if Zero Set |
-| F BRI | 1 | 1 ZC (NE) | 00:FF | Branch if Zero Clear |
-| F BRI | 1 | 2 NS (LT) | 00:FF | Branch if Negative Set |
-| F BRI | 1 | 3 NC (GE) | 00:FF | Branch if Negative Clear |
-| F BRI | 1 | 4 CS      | 00:FF | Branch if Carry Set |
-| F BRI | 1 | 5 CC      | 00:FF | Branch if Carry Clear |
-| F BRI | 1 | 6 OS      | 00:FF | Branch if Overflow Set |
-| F BRI | 1 | 7 OC      | 00:FF | Branch if Overflow Clear |
+* Immediate branching is relative distance from the current instruction pointer.
 
-* Indirect instructions use the value in the source register as the address to load the value from.
+| OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | DIRECTION (1) | DISTANCE (7) | Description |
+|------------|---------------|----------------|------------|-------------|
+| F BRI | 1 | 0 ZS (EQ) | 0 | 00:8F | Branch if Zero Set |
+| F BRI | 1 | 1 ZC (NE) | 0 | 00:8F | Branch if Zero Clear |
+| F BRI | 1 | 2 NS (LT) | 0 | 00:8F | Branch if Negative Set |
+| F BRI | 1 | 3 NC (GE) | 0 | 00:8F | Branch if Negative Clear |
+| F BRI | 1 | 4 CS      | 0 | 00:8F | Branch if Carry Set |
+| F BRI | 1 | 5 CC      | 0 | 00:8F | Branch if Carry Clear |
+| F BRI | 1 | 6 OS      | 0 | 00:8F | Branch if Overflow Set |
+| F BRI | 1 | 7 OC      | 0 | 00:8F | Branch if Overflow Clear |
+
+* Indirect instructions use the value in the source register as the address in memory to load the value from.
+* Offset is added after the value is loaded from memory.
 
 ## Registers:
 
