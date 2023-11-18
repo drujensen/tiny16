@@ -4,9 +4,11 @@ module registers (
   input [2:0] src_sel,
   input [2:0] dst_sel,
   input in_en,
+  input pc_en,
+  input jp_en,
+  input br_en,
   input [15:0] in,
   input out_en,
-  input pc_inc,
   output [15:0] out,
   output [15:0] src,
   output [15:0] dst
@@ -17,6 +19,9 @@ module registers (
   assign out = gpr[src_sel];
   assign src = gpr[src_sel];
   assign dst = gpr[dst_sel];
+
+  wire dir;
+  assign dir = jp_en ? in[11] : in[7];
 
   always @(posedge clk or posedge rst) begin
     if (rst) begin
@@ -33,8 +38,16 @@ module registers (
         gpr[dst_sel] <= in;
       end
 
-      if (pc_inc) begin
+      if (pc_en) begin
         gpr[0] <= gpr[0] + 1;
+      end
+
+      if (jp_en) begin
+        gpr[0] <= dir ? gpr[0] - in[10:0] : gpr[0] + in[10:0];
+      end
+
+      if (br_en) begin
+        gpr[0] <= dir ? gpr[0] - in[6:0] : gpr[0] + in[6:0];
       end
     end
   end

@@ -14,8 +14,10 @@ module controller (
   output reg [2:0] reg_src_sel,
   output reg [2:0] reg_dst_sel,
   output reg reg_in_en,
+  output reg reg_pc_en,
+  output reg reg_jp_en,
+  output reg reg_br_en,
   output reg reg_out_en,
-  output reg reg_pc_inc,
   output reg ctl_out_en,
   output reg dsp_in_en,
   output [15:0] out
@@ -64,8 +66,10 @@ module controller (
     reg_src_sel <= 3'b000;
     reg_dst_sel <= 3'b000;
     reg_in_en <= 0;
+    reg_pc_en <= 0;
+    reg_jp_en <= 0;
+    reg_br_en <= 0;
     reg_out_en <= 0;
-    reg_pc_inc <= 0;
     ctl_out_en <= 0;
     dsp_in_en <= 0;
 
@@ -78,7 +82,7 @@ module controller (
       end
       1 : begin
         mem_out_en <= 1; //send memory to bus
-        reg_pc_inc <= 1; //increment program counter
+        reg_pc_en <= 1; //increment program counter
       end
       2 : begin
         inst <= in; //get instruction
@@ -234,7 +238,7 @@ module controller (
               3 : begin
                 ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
-                reg_in_en <= 1;
+                reg_jp_en <= 1;
               end
             endcase
           end
@@ -249,7 +253,7 @@ module controller (
               4 : begin
                 ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
-                reg_in_en <= 1;
+                reg_jp_en <= 1;
               end
             endcase
           end
@@ -310,7 +314,7 @@ module controller (
                   case (counter)
                     3 : begin
                       ctl_out_en <= 1;
-                      reg_in_en <= 1;
+                      reg_br_en <= 1;
                     end
                   endcase
                 end else if (ind) begin
@@ -321,14 +325,14 @@ module controller (
                     end
                     4 : begin
                       mem_out_en <= 1;
-                      reg_in_en <= 1;
+                      reg_br_en <= 1;
                     end
                   endcase
                 end else begin
                   case (counter)
                     3 : begin
                       reg_out_en <= 1;
-                      reg_in_en <= 1;
+                      reg_br_en <= 1;
                     end
                   endcase
                 end
