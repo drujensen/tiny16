@@ -1,0 +1,13 @@
+name: tiny16 assembly compiler
+version: 0.1.0
+
+authors:
+  - Dru Jensen <drujensen@gmail.com>
+
+targets:
+  t16as:
+    main: src/t16as.cr
+
+crystal: 1.0.0
+
+license: MIT
