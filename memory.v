@@ -29,6 +29,6 @@ module memory (
   end
 
   initial begin
-    $readmemh("memory.hex", mem);
+    $readmemh("program.hex", mem);
   end
 endmodule

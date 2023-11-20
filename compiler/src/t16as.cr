@@ -134,12 +134,17 @@ class T16as
     puts "replacing labels with relative position"
     program.each_with_index do |line, index|
       if line.matches?(/:[a-zA-Z]+$/)
-        padding = line.includes?("JMP") || line.includes?("JSR") ? 11 : 7
         label = line.split(":")[1].strip
-        pos = labels[label] - index - 1
-        sign = pos < 0 ? "1" : "0"
-        replace = "#{sign}#{(pos.abs).to_s(2).rjust(padding, '0')}"
-        program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+        addr = labels[label]
+        if line.includes?("JMP") || line.includes?("JSR") || line.includes?("BR")
+          padding = line.includes?("JMP") || line.includes?("JSR") ? 11 : 7
+          pos = addr - index - 1
+          sign = pos < 0 ? "1" : "0"
+          replace = "#{sign}#{(pos.abs).to_s(2).rjust(padding, '0')}"
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+        else
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{addr}")
+        end
       end
     end
     puts program
@@ -151,6 +156,19 @@ class T16as
         match[1].ord.to_s(2).rjust(8, '0')
       end
     end
+    puts program
+
+    # replace strings with 8-bit ascii binary
+    program = program.map do |line|
+      if line.includes? "\""
+        parts = line.split("\"")
+        values = parts[1].gsub("\"", "").bytes.map(&.to_s(2).rjust(16, '0'))
+        values[0] = parts[0] + values[0]
+        values
+      else
+        line
+      end
+    end.flatten
     puts program
 
     # replace hex 0x? numbers with binary
@@ -236,10 +254,14 @@ class T16as
 end
 
 t16as = T16as.new
+program = t16as.compile
 
 # write to file
 File.open("program.hex", "w") do |f|
-  t16as.compile.each do |line|
+  program.each do |line|
     f.puts line.to_i(2).to_s(16).rjust(4, '0').upcase
+  end
+  (0..(256 - program.size - 1)).each do |i|
+    f.puts "0000"
   end
 end
