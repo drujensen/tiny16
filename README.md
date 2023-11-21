@@ -118,16 +118,16 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 ## Registers:
 
-| Register | Label | Description |
-|----------|-------|-------------|
-| 0 | x0 | (PC) Program Counter |
-| 1 | x1 | (SP) Stack Pointer |
-| 2 | x2 | Argument 1 |
-| 3 | x3 | Argument 2 |
-| 4 | x4 | Argument 3 |
-| 5 | x5 | Argument 4 |
-| 6 | x6 | Argument 5 |
-| 7 | x7 | Reserved (used for imm/ind instructions)|
+| Register | Label | Alias | Description |
+|----------|-------|-------|-------------|
+| 0 | X0 | PC | Program Counter |
+| 1 | X1 | SP | Stack Pointer |
+| 2 | X2 | A1 | Argument 1 |
+| 3 | X3 | A2 | Argument 2 |
+| 4 | X4 | A3 | Argument 3 |
+| 5 | X5 | A4 | Argument 4 |
+| 6 | X6 | A5 | Argument 5 |
+| 7 | X7 | A6 | Temp (used for imm/ind instructions)|
 
 ## Setup
 

@@ -14,7 +14,9 @@ module controller (
   output reg [2:0] reg_src_sel,
   output reg [2:0] reg_dst_sel,
   output reg reg_in_en,
-  output reg reg_pc_en,
+  output reg reg_pc_inc,
+  output reg reg_sp_inc,
+  output reg reg_sp_dec,
   output reg reg_jp_en,
   output reg reg_br_en,
   output reg reg_out_en,
@@ -66,7 +68,9 @@ module controller (
     reg_src_sel <= 3'b000;
     reg_dst_sel <= 3'b000;
     reg_in_en <= 0;
-    reg_pc_en <= 0;
+    reg_pc_inc <= 0;
+    reg_sp_inc <= 0;
+    reg_sp_dec <= 0;
     reg_jp_en <= 0;
     reg_br_en <= 0;
     reg_out_en <= 0;
@@ -82,7 +86,7 @@ module controller (
       end
       1 : begin
         mem_out_en <= 1; //send memory to bus
-        reg_pc_en <= 1; //increment program counter
+        reg_pc_inc <= 1; //increment program counter
       end
       2 : begin
         inst <= in; //get instruction
@@ -116,6 +120,54 @@ module controller (
               3 : begin // SET
               end
               4 : begin // CLR
+              end
+              5 : begin // PUSH
+                case (counter)
+                  3 : begin
+                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_out_en <= 1;
+                    mem_addr_en <= 1;
+                  end
+                  4 : begin
+                    reg_sp_dec <= 1;
+                  end
+                  5 : begin
+                    mem_out_en <= 1;
+                    reg_dst_sel <= src;
+                    reg_in_en <= 1;
+                  end
+                endcase
+              end
+              6 : begin // POP
+                case (counter)
+                  3 : begin
+                    reg_sp_inc <= 1;
+                  end
+                  4 : begin
+                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_out_en <= 1;
+                    mem_addr_en <= 1;
+                  end
+                  5 : begin
+                    mem_out_en <= 1;
+                    reg_dst_sel <= src;
+                    reg_in_en <= 1;
+                  end
+                endcase
+              end
+              //...
+              13 : begin // RET
+                case (counter)
+                  3 : begin
+                    reg_sp_inc <= 1;
+                  end
+                  4 : begin
+                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_out_en <= 1;
+                    reg_dst_sel <= 3'b000; //program counter
+                    reg_in_en <= 1;
+                  end
+                endcase
               end
               //...
               14 : begin // INT
@@ -245,12 +297,15 @@ module controller (
           13 : begin // JSR
             case (counter)
               3 : begin
-                reg_src_sel <= 3'b000;
+                reg_src_sel <= 3'b000; //program counter
                 reg_out_en <= 1;
-                reg_dst_sel <= 3'b001;
+                reg_dst_sel <= 3'b001; //stack pointer
                 reg_in_en <= 1;
               end
               4 : begin
+                reg_sp_dec <= 1;
+              end
+              5 : begin
                 ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
                 reg_jp_en <= 1;

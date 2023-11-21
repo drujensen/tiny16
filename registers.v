@@ -4,7 +4,9 @@ module registers (
   input [2:0] src_sel,
   input [2:0] dst_sel,
   input in_en,
-  input pc_en,
+  input pc_inc,
+  input sp_inc,
+  input sp_dec,
   input jp_en,
   input br_en,
   input [15:0] in,
@@ -26,7 +28,7 @@ module registers (
   always @(posedge clk or posedge rst) begin
     if (rst) begin
       gpr[0] <= 16'h0000;
-      gpr[1] <= 16'hFFFF;
+      gpr[1] <= 16'h00FF;
       gpr[2] <= 16'h0000;
       gpr[3] <= 16'h0000;
       gpr[4] <= 16'h0000;
@@ -38,8 +40,16 @@ module registers (
         gpr[dst_sel] <= in;
       end
 
-      if (pc_en) begin
+      if (pc_inc) begin
         gpr[0] <= gpr[0] + 1;
+      end
+
+      if (sp_inc) begin
+        gpr[1] <= gpr[1] + 1;
+      end
+
+      if (sp_dec) begin
+        gpr[1] <= gpr[1] - 1;
       end
 
       if (jp_en) begin
