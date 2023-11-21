@@ -122,9 +122,9 @@ class T16as
     # track labels with their line number
     labels = {} of String => Int32
     program.each_with_index do |line, index|
-      if line.matches?(/^[a-zA-Z]+:/)
-        labels[line.split(":")[0]] = index
-        program[index] = line.split(":")[1].strip
+      if line.matches?(/^[a-zA-Z]+:\s/)
+        labels[line.split(": ")[0]] = index
+        program[index] = line.split(": ")[1].strip
       end
     end
 
@@ -143,7 +143,7 @@ class T16as
           replace = "#{sign}#{(pos.abs).to_s(2).rjust(padding, '0')}"
           program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
         else
-          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{addr}")
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{addr.to_s(2).rjust(8, '0')}")
         end
       end
     end
@@ -209,7 +209,7 @@ class T16as
     # replace opcodes with binary
     puts "replacing opcodes with binary"
     program = program.map do |line|
-      line.gsub(/#{opcodes.keys.join("|")}/) do |match|
+      line.gsub(/(#{opcodes.keys.join("|")})(?=\s|$)/) do |match|
         opcodes[match]
       end
     end
@@ -218,7 +218,7 @@ class T16as
     # replace syscodes with binary
     puts "replacing syscodes with binary"
     program = program.map do |line|
-      line.gsub(/#{syscodes.keys.join("|")}/) do |match|
+      line.gsub(/(#{syscodes.keys.join("|")})(?=\s|$)/) do |match|
         syscodes[match]
       end
     end
@@ -227,7 +227,7 @@ class T16as
     # replace cndcodes with binary
     puts "replacing cndcodes with binary"
     program = program.map do |line|
-      line.gsub(/#{cndcodes.keys.join("|")}/) do |match|
+      line.gsub(/(#{cndcodes.keys.join("|")})(?=\s|$)/) do |match|
         cndcodes[match]
       end
     end
@@ -236,7 +236,7 @@ class T16as
     # replace registers with binary
     puts "replacing registers with binary"
     program = program.map do |line|
-      line.gsub(/#{registers.keys.join("|")}/) do |match|
+      line.gsub(/(#{registers.keys.join("|")})(?=\s|$)/) do |match|
         registers[match]
       end
     end

@@ -33,7 +33,7 @@ all: $(PROJ).bin $(PROJ).tb
 %.tb: %_tb.v %.v
 	iverilog -o $@ $^
 
-prog: $(PROJ).bin
+install: $(PROJ).bin
 	tinyprog -p $<
 
 clean:
