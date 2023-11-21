@@ -1,10 +1,10 @@
 ; print hello, Dru
-init: LDA# ques ; load direct "ques" address to A
-      STA ptr   ; store address to ptr
-loop: LDA ptr   ; load ptr to A
-      OUT* ptr  ; output indirect value at ptr
-      INC       ; increment ptr
-      STA ptr   ; store new position to ptr
+init: LDI A1 :ques ; load direct "ques" address to A
+      ST A1 :ptr   ; store address to ptr
+loop: LDI A1 :ptr   ; load ptr to A
+      OUT *A1 :ptr  ; output indirect value at ptr
+      ADDI A1 0x1       ; increment ptr
+      ST A1 :ptr   ; store new position to ptr
       LDA* ptr  ; load value in ptr
       CMP# 00   ; compare to end of string
       BNE loop  ; loop if not equal
