@@ -48,7 +48,7 @@ module controller (
   wire step_reset;
   reg halt = 0;
 
-  assign step_reset = (counter == 4) ? 1 : 0;
+  assign step_reset = (counter == 6) ? 1 : 0;
 
   step step (
    .clk(clk),
@@ -124,17 +124,17 @@ module controller (
               5 : begin // PUSH
                 case (counter)
                   3 : begin
-                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_src_sel <= 3'b001; //stack pointer
                     reg_out_en <= 1;
                     mem_addr_en <= 1;
                   end
                   4 : begin
-                    reg_sp_dec <= 1;
+                    reg_src_sel <= src;
+                    reg_out_en <= 1;
+                    mem_in_en <= 1;
                   end
                   5 : begin
-                    mem_out_en <= 1;
-                    reg_dst_sel <= src;
-                    reg_in_en <= 1;
+                    reg_sp_dec <= 1;
                   end
                 endcase
               end
@@ -144,7 +144,7 @@ module controller (
                     reg_sp_inc <= 1;
                   end
                   4 : begin
-                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_src_sel <= 3'b001; //stack pointer
                     reg_out_en <= 1;
                     mem_addr_en <= 1;
                   end

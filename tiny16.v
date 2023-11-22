@@ -33,7 +33,6 @@ module tiny16 (
     // instantiate the memory module
     memory mem (
         .clk(clk_1mhz),
-        .rst(RST),
         .addr_en(mem_addr_en),
         .addr(bus_out),
         .in_en(mem_in_en),
