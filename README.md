@@ -17,6 +17,8 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
  | 0 SYS | 2 OUT  | output to display |
  | 0 SYS | 3 SET  | set register |
  | 0 SYS | 4 CLR  | clear register |
+ | 0 SYS | 5 PUSH | push register to stack |
+ | 0 SYS | 6 POP  | pop register from stack |
  | 0 SYS | 13 RET | return from JSR subroutine |
  | 0 SYS | 14 INT | interrupt handler |
  | 0 SYS | 15 HLT | halt cpu |

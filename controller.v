@@ -162,9 +162,13 @@ module controller (
                     reg_sp_inc <= 1;
                   end
                   4 : begin
-                    reg_src_sel <= 3'b010; //stack pointer
+                    reg_src_sel <= 3'b001;
                     reg_out_en <= 1;
-                    reg_dst_sel <= 3'b000; //program counter
+                    mem_addr_en <= 1;
+                  end
+                  5 : begin
+                    mem_out_en <= 1;
+                    reg_dst_sel <= 3'b000;
                     reg_in_en <= 1;
                   end
                 endcase
@@ -212,8 +216,43 @@ module controller (
             end
           end
           2 : begin // ST
-            reg_src_sel <= dst;
-            reg_dst_sel <= src;
+            if (ind) begin
+              case (counter)
+                3 : begin
+                  reg_src_sel <= dst;
+                  reg_out_en <= 1;
+                  mem_addr_en <= 1;
+                end
+                4 : begin
+                  reg_dst_sel <= 3'b111;
+                  reg_in_en <= 1;
+                  mem_out_en <= 1;
+                end
+                5 : begin
+                  reg_src_sel <= src;
+                  reg_out_en <= 1;
+                  mem_addr_en <= 1;
+                end
+                6 : begin
+                  reg_dst_sel <= 3'b111;
+                  reg_out_en <= 1;
+                  mem_in_en <= 1;
+                end
+              endcase
+            end else begin
+              case (counter)
+                3 : begin
+                  reg_src_sel <= src;
+                  reg_out_en <= 1;
+                  mem_addr_en <= 1;
+                end
+                4 : begin
+                  reg_src_sel <= dst;
+                  reg_out_en <= 1;
+                  mem_in_en <= 1;
+                end
+              endcase
+            end
           end
           3,4,5,6,7,8,9 : begin // Math and Logic
             reg_src_sel <= src;
@@ -297,18 +336,22 @@ module controller (
           13 : begin // JSR
             case (counter)
               3 : begin
-                reg_src_sel <= 3'b000; //program counter
+                reg_src_sel <= 3'b001;
                 reg_out_en <= 1;
-                reg_dst_sel <= 3'b001; //stack pointer
-                reg_in_en <= 1;
+                mem_addr_en <= 1;
               end
               4 : begin
-                reg_sp_dec <= 1;
+                reg_src_sel <= 3'b000;
+                reg_out_en <= 1;
+                mem_in_en <= 1;
               end
               5 : begin
                 ctl_out_en <= 1;
                 reg_dst_sel <= 3'b000;
                 reg_jp_en <= 1;
+              end
+              6 : begin
+                reg_sp_dec <= 1;
               end
             endcase
           end

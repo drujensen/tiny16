@@ -23,7 +23,8 @@ module memory (
         mar <= addr;
       end
       if (in_en) begin
-        mem[mar] <= in;
+        //TODO: fix this
+        //mem[mar] <= in;
       end
     end
   end
