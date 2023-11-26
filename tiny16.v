@@ -42,6 +42,8 @@ module tiny16 (
     );
 
     wire reg_in_en;
+    wire reg_up_en;
+    wire reg_lo_en;
     wire reg_pc_inc;
     wire reg_sp_inc;
     wire reg_sp_dec;
@@ -61,6 +63,8 @@ module tiny16 (
         .src_sel(reg_src_sel),
         .dst_sel(reg_dst_sel),
         .in_en(reg_in_en),
+        .up_en(reg_up_en),
+        .lo_en(reg_lo_en),
         .pc_inc(reg_pc_inc),
         .sp_inc(reg_sp_inc),
         .sp_dec(reg_sp_dec),
@@ -110,6 +114,8 @@ module tiny16 (
         .reg_src_sel(reg_src_sel),
         .reg_dst_sel(reg_dst_sel),
         .reg_in_en(reg_in_en),
+        .reg_up_en(reg_up_en),
+        .reg_lo_en(reg_lo_en),
         .reg_pc_inc(reg_pc_inc),
         .reg_sp_inc(reg_sp_inc),
         .reg_sp_dec(reg_sp_dec),

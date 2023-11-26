@@ -14,6 +14,8 @@ module controller (
   output reg [2:0] reg_src_sel,
   output reg [2:0] reg_dst_sel,
   output reg reg_in_en,
+  output reg reg_up_en,
+  output reg reg_lo_en,
   output reg reg_pc_inc,
   output reg reg_sp_inc,
   output reg reg_sp_dec,
@@ -68,6 +70,8 @@ module controller (
     reg_src_sel <= 3'b000;
     reg_dst_sel <= 3'b000;
     reg_in_en <= 0;
+    reg_up_en <= 0;
+    reg_lo_en <= 0;
     reg_pc_inc <= 0;
     reg_sp_inc <= 0;
     reg_sp_dec <= 0;
@@ -186,11 +190,11 @@ module controller (
           1 : begin // LD
             reg_src_sel <= src;
             reg_dst_sel <= dst;
-            if (imm) begin
+            if (imm) begin //LLI
               case (counter)
                 3: begin
                   ctl_out_en <= 1;
-                  reg_in_en <= 1;
+                  reg_lo_en <= 1;
                 end
               endcase
             end else begin
@@ -215,8 +219,16 @@ module controller (
               end
             end
           end
-          2 : begin // ST
-            if (ind) begin
+          2 : begin // LUI
+            if (imm) begin
+              case (counter)
+                3 : begin
+                  reg_dst_sel <= dst;
+                  ctl_out_en <= 1;
+                  reg_up_en <= 1;
+                end
+              endcase
+            end else if (ind) begin //ST
               case (counter)
                 3 : begin
                   reg_src_sel <= dst;

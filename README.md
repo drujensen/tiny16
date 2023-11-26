@@ -35,7 +35,8 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 | OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
 |------------|---------------|-----------------|-----------|-------------|
-| 1 LDI | 1 | x0:x7 | 00:FF | Load from memory |
+| 1 LLI | 1 | x0:x7 | 00:FF | Upper 8 bits |
+| 2 LUI | 1 | x0:x7 | 00:FF | Lower 8 bits |
 
 ### Arithmetic/Logic Instructions
 
@@ -43,7 +44,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 |------------|---------------|  ---------------|--------------|------------|------------|-------------|
 | 3 ADD  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Add |
 | 4 SUB  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Subtract |
-| 5 MULT | 0 | x0:x7 | 0 | x0:x7 | 0:F | Multiply |
+| 5 MLT  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Multiply |
 | 6 DIV  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Divide |
 | 7 AND  | 0 | x0:x7 | 0 | x0:x7 | 0:F | And |
 | 8 OR   | 0 | x0:x7 | 0 | x0:x7 | 0:F | Or |
@@ -57,7 +58,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 |------------|---------------|-----------------|-----------|-------------|
 | 3 ADDI  | 1 | x0:x7 | 00:FF | Add |
 | 4 SUBI  | 1 | x0:x7 | 00:FF | Subtract |
-| 5 MULTI | 1 | x0:x7 | 00:FF | Multiply |
+| 5 MLTI  | 1 | x0:x7 | 00:FF | Multiply |
 | 6 DIVI  | 1 | x0:x7 | 00:FF | Divide |
 | 7 ANDI  | 1 | x0:x7 | 00:FF | And |
 | 8 ORI   | 1 | x0:x7 | 00:FF | Or |

@@ -4,6 +4,8 @@ module registers (
   input [2:0] src_sel,
   input [2:0] dst_sel,
   input in_en,
+  input up_en,
+  input lo_en,
   input pc_inc,
   input sp_inc,
   input sp_dec,
@@ -38,6 +40,14 @@ module registers (
     end else begin
       if (in_en) begin
         gpr[dst_sel] <= in;
+      end
+
+      if (up_en) begin
+        gpr[dst_sel][15:8] <= in[7:0];
+      end
+      
+      if (lo_en) begin
+        gpr[dst_sel][7:0] <= in[7:0];
       end
 
       if (pc_inc) begin
