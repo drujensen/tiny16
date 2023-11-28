@@ -47,11 +47,9 @@ module tiny16 (
     wire reg_pc_inc;
     wire reg_sp_inc;
     wire reg_sp_dec;
-    wire reg_jp_en;
-    wire reg_br_en;
     wire reg_out_en;
-    wire [2:0] reg_src_sel;
-    wire [2:0] reg_dst_sel;
+    wire [3:0] reg_src_sel;
+    wire [3:0] reg_dst_sel;
     wire [15:0] src;
     wire [15:0] dst;
     wire [15:0] reg_out;
@@ -68,8 +66,6 @@ module tiny16 (
         .pc_inc(reg_pc_inc),
         .sp_inc(reg_sp_inc),
         .sp_dec(reg_sp_dec),
-        .jp_en(reg_jp_en),
-        .br_en(reg_br_en),
         .in(bus_out),
         .src(src),
         .dst(dst),
@@ -78,7 +74,6 @@ module tiny16 (
     );
 
     wire [3:0] alu_opcode;
-    wire alu_ar_flag;
     wire alu_out_en;
     wire [3:0] alu_flags;
     wire [15:0] alu_out;
@@ -88,7 +83,6 @@ module tiny16 (
         .clk(clk_1mhz),
         .rst(RST),
         .opcode(alu_opcode),
-        .ar_flag(alu_ar_flag),
         .src1(dst),
         .src2(src),
         .out_en(alu_out_en),
@@ -107,7 +101,6 @@ module tiny16 (
         .flags(alu_flags),
         .alu_opcode(alu_opcode),
         .alu_out_en(alu_out_en),
-        .alu_ar_flag(alu_ar_flag),
         .mem_addr_en(mem_addr_en),
         .mem_in_en(mem_in_en),
         .mem_out_en(mem_out_en),
@@ -119,8 +112,6 @@ module tiny16 (
         .reg_pc_inc(reg_pc_inc),
         .reg_sp_inc(reg_sp_inc),
         .reg_sp_dec(reg_sp_dec),
-        .reg_jp_en(reg_jp_en),
-        .reg_br_en(reg_br_en),
         .reg_out_en(reg_out_en),
         .ctl_out_en(ctl_out_en),
         .dsp_in_en(dsp_in_en),
