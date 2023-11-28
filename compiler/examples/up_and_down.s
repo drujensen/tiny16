@@ -1,14 +1,15 @@
-; count up to 255 and output the result
-; then count down to 0 and output the result
-
-      LDI  x2, 0x0
-up:   OUT  x2
-      ADDI x2, 0x1
-      CMPI x2, 0xFF
-      BRI  EQ, :down
-      JMP  :up
-down: OUT  x2
-      SUBI x2, 0x1
-      CMPI x2, 0x0
-      BRI  EQ, :up
-      JMP  :down
+      LLI  a0, 0x00
+      LLI  t0, 0x01
+			LLI  a1, 0xFF
+up:   OUT  a0
+      ADD  a0, t0
+      LLI  bp, :down
+			BEQ  a0, a1
+      LLI  bp, :up
+			BEQ  x0, x0
+down: OUT  a0
+      SUB  a0, t0
+			LLI bp, :up
+			BEQ a0, x0
+			LLI bp, :down
+			BEQ x0, x0

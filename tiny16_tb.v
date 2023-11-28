@@ -34,7 +34,15 @@ module tiny16_tb;
                      dut.regs.gpr[4],
                      dut.regs.gpr[5],
                      dut.regs.gpr[6],
-                     dut.regs.gpr[7]
+                     dut.regs.gpr[7],
+                     dut.regs.gpr[8],
+                     dut.regs.gpr[9],
+                     dut.regs.gpr[10],
+                     dut.regs.gpr[11],
+                     dut.regs.gpr[12],
+                     dut.regs.gpr[13],
+                     dut.regs.gpr[14],
+                     dut.regs.gpr[15]
                   );
         $dumpvars(0, dut);
 

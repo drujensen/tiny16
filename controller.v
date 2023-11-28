@@ -31,7 +31,7 @@ module controller (
   parameter BP = 4'b0011; // branch pointer
   parameter RES = 4'b1111; // reserved register
 
-  parameter SUB = 4'b0010; // Subtract
+  parameter SUB = 4'b0001; // Subtract
 
   wire [2:0] counter;
   reg [15:0] inst;
@@ -48,7 +48,7 @@ module controller (
   assign funct = inst[11:8];
   assign dst = inst[7:4];
   assign src = inst[3:0];
-  assign out = (opcode >= 4 || opcode < 8) ? inst[3:0] : inst[7:0];
+  assign out = inst[7:0];
 
   assign alu_funct = inst[13:10];
   assign imm = inst[9];
@@ -108,7 +108,7 @@ module controller (
               1 : begin // IN
               end
               2 : begin // OUT
-                reg_src_sel <= src;
+                reg_src_sel <= dst;
                 if (ind) begin
                   case (counter)
                     3 : begin
@@ -137,7 +137,7 @@ module controller (
                     mem_addr_en <= 1;
                   end
                   4 : begin
-                    reg_src_sel <= src;
+                    reg_src_sel <= dst;
                     reg_out_en <= 1;
                     mem_in_en <= 1;
                   end
@@ -158,7 +158,7 @@ module controller (
                   end
                   5 : begin
                     mem_out_en <= 1;
-                    reg_dst_sel <= src;
+                    reg_dst_sel <= dst;
                     reg_in_en <= 1;
                   end
                 endcase
@@ -272,11 +272,16 @@ module controller (
                     mem_out_en <= 1;
                     reg_in_en <= 1;
                   end
+                  5 : begin
+                    reg_src_sel <= RES;
+                    alu_out_en <= 1;
+                    reg_in_en <= 1;
+                  end
                 endcase
               end else begin
                 case (counter)
                   3 : begin
-                    reg_out_en <= 1;
+                    alu_out_en <= 1;
                     reg_in_en <= 1;
                   end
                 endcase

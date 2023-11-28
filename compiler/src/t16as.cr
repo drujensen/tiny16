@@ -15,92 +15,119 @@ class T16as
       "CLR" => "00000100",
       "PSH" => "00000101",
       "POP" => "00000110",
-      "RET" => "00001101",
       "INT" => "00001110",
       "HLT" => "00001111",
+      "LLI" => "0001",
+      "LUI" => "0010",
     } of String => String
 
     self.opcodes = {
-      "LD"  => "0001",
-      "LL"  => "0001",
-      "ST"  => "0010",
-      "LU"  => "0010",
-      "ADD" => "0011",
-      "SUB" => "0100",
-      "MLT" => "0101",
-      "DIV" => "0110",
-      "AND" => "0111",
-      "OR"  => "1000",
-      "XOR" => "1001",
-      "SL"  => "1010",
-      "SR"  => "1011",
-      "JMP" => "1100",
-      "JSR" => "1101",
-      "CMP" => "1110",
-      "BR"  => "1111",
-      "B"   => "1111",
+      "LD"   => "00110100",
+      "ST"   => "00111000",
+      "ADD"  => "01000000",
+      "SUB"  => "01000100",
+      "MLT"  => "01001000",
+      "DIV"  => "01001100",
+      "AND"  => "01010000",
+      "OR"   => "01010100",
+      "XOR"  => "01011000",
+      "NOT"  => "01011100",
+      "SLA"  => "01100000",
+      "SRA"  => "01100100",
+      "SHL"  => "01101000",
+      "SHR"  => "01101100",
+      "LD#"  => "00110110",
+      "ST#"  => "00111010",
+      "ADD#" => "01000010",
+      "SUB#" => "01000110",
+      "MLT#" => "01001010",
+      "DIV#" => "01001110",
+      "AND#" => "01010010",
+      "OR#"  => "01010110",
+      "XOR#" => "01011010",
+      "NOT#" => "01011110",
+      "SLA#" => "01100010",
+      "SRA#" => "01100110",
+      "SHL#" => "01101010",
+      "SHR#" => "01101110",
+      "LDI"  => "00110110",
+      "STI"  => "00111010",
+      "ADDI" => "01000010",
+      "SUBI" => "01000110",
+      "MLTI" => "01001010",
+      "DIVI" => "01001110",
+      "ANDI" => "01010010",
+      "ORI"  => "01010110",
+      "XORI" => "01011010",
+      "NOTI" => "01011110",
+      "SLAI" => "01100010",
+      "SRAI" => "01100110",
+      "SHLI" => "01101010",
+      "SHRI" => "01101110",
+      "LD*"  => "00110101",
+      "ST*"  => "00111001",
+      "ADD*" => "01000001",
+      "SUB*" => "01000101",
+      "MLT*" => "01001001",
+      "DIV*" => "01001101",
+      "AND*" => "01010001",
+      "OR*"  => "01010101",
+      "XOR*" => "01011001",
+      "NOT*" => "01011101",
+      "SLA*" => "01100001",
+      "SRA*" => "01100101",
+      "SHL*" => "01101001",
+      "SHR*" => "01101101",
     } of String => String
 
     self.cndcodes = {
-      "EQ"  => "0000",
-      "NE"  => "0001",
-      "LT"  => "0010",
-      "GE"  => "0011",
-      "ZS"  => "0000",
-      "ZC"  => "0001",
-      "NS"  => "0010",
-      "NC"  => "0011",
-      "CS"  => "0100",
-      "CC"  => "0101",
-      "OS"  => "0110",
-      "OC"  => "0111",
-      "IEQ" => "1000",
-      "INE" => "1001",
-      "ILT" => "1010",
-      "IGE" => "1011",
-      "IZS" => "1000",
-      "IZC" => "1001",
-      "INS" => "1010",
-      "INC" => "1011",
-      "ICS" => "1100",
-      "ICC" => "1101",
-      "IOS" => "1110",
-      "IOC" => "1111",
+      "BEQ" => "10000000",
+      "BNE" => "10000001",
+      "BLT" => "10000010",
+      "BGE" => "10000011",
+      "BZS" => "10000000",
+      "BZC" => "10000001",
+      "BNS" => "10000010",
+      "BNC" => "10000011",
+      "BCS" => "10000100",
+      "BCC" => "10000101",
+      "BOS" => "10000110",
+      "BOC" => "10000111",
     } of String => String
 
     self.registers = {
-      "PC"  => "0000",
-      "SP"  => "0001",
-      "A1"  => "0010",
-      "A2"  => "0011",
-      "A3"  => "0100",
-      "A4"  => "0101",
-      "A5"  => "0110",
-      "A6"  => "0111",
-      "X0"  => "0000",
-      "X1"  => "0001",
-      "X2"  => "0010",
-      "X3"  => "0011",
-      "X4"  => "0100",
-      "X5"  => "0101",
-      "X6"  => "0110",
-      "X7"  => "0111",
-      "IPC" => "1000",
-      "ISP" => "1001",
-      "IA1" => "1010",
-      "IA2" => "1011",
-      "IA3" => "1100",
-      "IA4" => "1101",
-      "IA5" => "1110",
-      "IA6" => "1111",
-      "IX0" => "1000",
-      "IX1" => "1001",
-      "IX2" => "1010",
-      "IX3" => "1011",
-      "IX4" => "1100",
-      "IX5" => "1101",
-      "IX6" => "1110",
-      "IX7" => "1111",
+      "ZERO" => "0000",
+      "PC"   => "0001",
+      "SP"   => "0010",
+      "BP"   => "0011",
+      "RA"   => "0100",
+      "T0"   => "0101",
+      "T1"   => "0110",
+      "T2"   => "0111",
+      "A0"   => "1000",
+      "A1"   => "1001",
+      "A2"   => "1010",
+      "A3"   => "1011",
+      "A4"   => "1100",
+      "A5"   => "1101",
+      "A6"   => "1110",
+      "A7"   => "1111",
+      "X0"   => "0000",
+      "X1"   => "0001",
+      "X2"   => "0010",
+      "X3"   => "0011",
+      "X4"   => "0100",
+      "X5"   => "0101",
+      "X6"   => "0110",
+      "X7"   => "0111",
+      "X8"   => "1000",
+      "X9"   => "1001",
+      "XA"   => "1010",
+      "XB"   => "1011",
+      "XC"   => "1100",
+      "XD"   => "1101",
+      "XE"   => "1110",
+      "XF"   => "1111",
     } of String => String
   end
 
@@ -110,17 +137,12 @@ class T16as
 
     # remove comments, extra space and empty lines
     program = program.map { |line| line.split(";")[0].strip }.reject(&.empty?)
+
     # remove commas
     program = program.map { |line| line.gsub(",", " ") }
 
     # remove extra spaces
     program = program.map { |line| line.gsub(/\s+/, " ") }
-
-    # replace "I " with " I" for immediate addressing
-    program = program.map { |line| line.gsub("I ", " I") }
-
-    # replace " *" with " I" for indirect addressing
-    program = program.map { |line| line.gsub(" *", " I") }
 
     # track labels with their line number
     labels = {} of String => Int32
@@ -133,21 +155,13 @@ class T16as
 
     puts "labels: #{labels}"
 
-    # replace labels with relative position
-    puts "replacing labels with relative position"
+    # replace labels with position
+    puts "replacing labels with position"
     program.each_with_index do |line, index|
       if line.matches?(/:[a-zA-Z]+$/)
         label = line.split(":")[1].strip
         addr = labels[label]
-        if line.includes?("JMP") || line.includes?("JSR") || line.includes?("BR")
-          padding = line.includes?("JMP") || line.includes?("JSR") ? 11 : 7
-          pos = addr - index - 1
-          sign = pos < 0 ? "1" : "0"
-          replace = "#{sign}#{(pos.abs).to_s(2).rjust(padding, '0')}"
-          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
-        else
-          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{addr.to_s(2).rjust(8, '0')}")
-        end
+        program[index] = line.gsub(/:[a-zA-Z]+$/, "#{addr.to_s(2).rjust(8, '0')}")
       end
     end
     puts program
@@ -211,8 +225,9 @@ class T16as
 
     # replace opcodes with binary
     puts "replacing opcodes with binary"
+    regex = /(#{opcodes.keys.join("|")})(?=\s|$)/
     program = program.map do |line|
-      line.gsub(/(#{opcodes.keys.join("|")})(?=\s|$)/) do |match|
+      line.gsub(regex) do |match|
         opcodes[match]
       end
     end
