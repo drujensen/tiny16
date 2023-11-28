@@ -28,9 +28,11 @@ module controller (
 
   parameter PC = 4'b0001; // program counter
   parameter SP = 4'b0010; // stack pointer
-  parameter BP = 4'b0011; // branch pointer
+  parameter BA = 4'b0011; // branch address
+  parameter RA = 4'b0100; // return address
   parameter RES = 4'b1111; // reserved register
 
+  parameter ADD = 4'b0000; // Add
   parameter SUB = 4'b0001; // Subtract
 
   wire [2:0] counter;
@@ -129,40 +131,6 @@ module controller (
               end
               4 : begin // CLR
               end
-              5 : begin // PUSH
-                case (counter)
-                  3 : begin
-                    reg_src_sel <= SP; //stack pointer
-                    reg_out_en <= 1;
-                    mem_addr_en <= 1;
-                  end
-                  4 : begin
-                    reg_src_sel <= dst;
-                    reg_out_en <= 1;
-                    mem_in_en <= 1;
-                  end
-                  5 : begin
-                    reg_sp_dec <= 1;
-                  end
-                endcase
-              end
-              6 : begin // POP
-                case (counter)
-                  3 : begin
-                    reg_sp_inc <= 1;
-                  end
-                  4 : begin
-                    reg_src_sel <= SP; //stack pointer
-                    reg_out_en <= 1;
-                    mem_addr_en <= 1;
-                  end
-                  5 : begin
-                    mem_out_en <= 1;
-                    reg_dst_sel <= dst;
-                    reg_in_en <= 1;
-                  end
-                endcase
-              end
               //...
               14 : begin // INT
               end
@@ -243,7 +211,7 @@ module controller (
               end
             endcase
           end
-          4,5,6,7 : begin // Math, Logic, Shift, Reserved
+          4,5,6,7 : begin // Math, Logic, Shift
             alu_opcode <= alu_funct;
             reg_src_sel <= src;
             reg_dst_sel <= dst;
@@ -288,7 +256,35 @@ module controller (
               end
             end
           end
-          8 : begin // BR
+          8 : begin //JAL
+            case (counter)
+              3 : begin
+                reg_src_sel <= PC;
+                reg_dst_sel <= RA;
+                reg_out_en <= 1;
+                reg_in_en <= 1;
+              end
+              4 : begin // store offset in RES
+                ctl_out_en <= 1;
+                reg_dst_sel <= RES;
+                reg_in_en <= 1;
+              end
+              5 : begin // ADD Offset to target register
+                reg_src_sel <= funct;
+                reg_dst_sel <= RES;
+                alu_opcode <= ADD; // Add
+                alu_out_en <= 1;
+                reg_in_en <= 1;
+              end
+              6 : begin // Jump to address in RES
+                reg_src_sel <= RES;
+                reg_dst_sel <= PC;
+                reg_out_en <= 1;
+                reg_in_en <= 1;
+              end
+            endcase
+          end
+          9 : begin // BR
             case (counter)
               3 : begin
                 reg_src_sel <= src;
@@ -305,11 +301,49 @@ module controller (
                     (funct == 5 && ~flags[2]) || // No Carry
                     (funct == 6 && flags[3]) || // Overflow - Greater Than or Equal
                     (funct == 7 && ~flags[3])) begin // No Overflow - Less Than
-                      reg_src_sel <= BP; // Branch Pointer
+                      reg_src_sel <= BA; // Branch Address
                       reg_dst_sel <= PC; // Program Counter
                       reg_out_en <= 1;
                       reg_in_en <= 1;
                 end
+              end
+            endcase
+          end
+          10 : begin // Stack Functions
+            case (funct)
+              0 : begin // PUSH
+                case (counter)
+                  3 : begin
+                    reg_src_sel <= SP;
+                    reg_out_en <= 1;
+                    mem_addr_en <= 1;
+                  end
+                  4 : begin
+                    reg_src_sel <= dst;
+                    reg_out_en <= 1;
+                    mem_in_en <= 1;
+                  end
+                  5 : begin
+                    reg_sp_dec <= 1;
+                  end
+                endcase
+              end
+              1 : begin // POP
+                case (counter)
+                  3 : begin
+                    reg_sp_inc <= 1;
+                  end
+                  4 : begin
+                    reg_src_sel <= SP;
+                    reg_out_en <= 1;
+                    mem_addr_en <= 1;
+                  end
+                  5 : begin
+                    mem_out_en <= 1;
+                    reg_dst_sel <= dst;
+                    reg_in_en <= 1;
+                  end
+                endcase
               end
             endcase
           end

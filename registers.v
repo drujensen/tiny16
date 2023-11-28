@@ -18,7 +18,8 @@ module registers (
 
   parameter PC = 4'b0001; // program counter
   parameter SP = 4'b0010; // stack pointer
-  parameter BP = 4'b0011; // branch pointer
+  parameter BA = 4'b0011; // branch address
+  parameter RA = 4'b0100; // return address
 
   reg [15:0] gpr[0:15];
 

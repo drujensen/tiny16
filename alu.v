@@ -11,18 +11,21 @@ module alu (
 
   wire [16:0] result;
 
-  assign result = (opcode == 4'b0000) ? src1 + src2 : // Addition
-                  (opcode == 4'b0001) ? src1 - src2 : // Subtraction
-                  (opcode == 4'b0010) ? src1 * src2 : // Multiplication
-                  (opcode == 4'b0011) ? src1 / src2 : // Division
-                  (opcode == 4'b0100) ? src1 & src2 : // Bitwise AND
-                  (opcode == 4'b0101) ? src1 | src2 : // Bitwise OR
-                  (opcode == 4'b0110) ? src1 ^ src2 : // Bitwise XOR
-                  (opcode == 4'b0111) ?      ~ src2 : // Bitwise NOT
-                  (opcode == 4'b1000) ? src1 <<< src2 : // Shift Left Arithmetic
-                  (opcode == 4'b1001) ? src1 >>> src2 : // Shift Right Arithmetic
-                  (opcode == 4'b1010) ? src1 << src2 : // Shift Left Logical
-                  (opcode == 4'b1011) ? src1 >> src2 : // Shift Right Logical
+  assign result = (opcode == 4'b0000) ? src1 + src2 : // ADD
+                  (opcode == 4'b0001) ? src1 - src2 : // SUB
+                  (opcode == 4'b0010) ? src1 + src2 + flags[2] : // ADC
+                  (opcode == 4'b0011) ? src1 - src2 - ~flags[2] : // SBC
+                  (opcode == 4'b0100) ? src1 * src2 : // MLT
+                  (opcode == 4'b0101) ? src1 / src2 : // DIV
+                  (opcode == 4'b0110) ? src1 % src2 : // MOD
+                  (opcode == 4'b1000) ? src1 & src2 : // Bitwise AND
+                  (opcode == 4'b1001) ? src1 | src2 : // Bitwise OR
+                  (opcode == 4'b1010) ? src1 ^ src2 : // Bitwise XOR
+                  (opcode == 4'b1011) ?      ~ src2 : // Bitwise NOT
+                  (opcode == 4'b1100) ? src1 <<< src2 : // Shift Left Arithmetic
+                  (opcode == 4'b1101) ? src1 >>> src2 : // Shift Right Arithmetic
+                  (opcode == 4'b1110) ? src1 << src2 : // Shift Left Logical
+                  (opcode == 4'b1111) ? src1 >> src2 : // Shift Right Logical
                   17'b0; // Default
 
   assign out = result[15:0];

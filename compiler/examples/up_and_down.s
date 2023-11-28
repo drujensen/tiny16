@@ -3,13 +3,13 @@
 			LLI  a1, 0xFF
 up:   OUT  a0
       ADD  a0, t0
-      LLI  bp, :down
+      LLI  ba, :down
 			BEQ  a0, a1
-      LLI  bp, :up
+      LLI  ba, :up
 			BEQ  x0, x0
 down: OUT  a0
       SUB  a0, t0
-			LLI bp, :up
+			LLI ba, :up
 			BEQ a0, x0
-			LLI bp, :down
+			LLI ba, :down
 			BEQ x0, x0
