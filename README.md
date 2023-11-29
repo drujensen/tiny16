@@ -59,8 +59,6 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 ### Branch Instructions
 
-* Jump is relative to the current instruction pointer.
-
 | OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
 |--------|--------|--------|--------|--------------|
 | 8 JUMP | 0 JALR | x0:x15 | x0:x15 | Jump And Link Register |
@@ -78,6 +76,13 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 | 9 BRANCH | 6 OS      | x0:x15 | x0:x15 | Branch if Overflow Set |
 | 9 BRANCH | 7 OC      | x0:x15 | x0:x15 | Branch if Overflow Clear |
 
+
+### Stack Instructions
+
+| OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
+|--------|--------|--------|--------|--------------|
+| 10 STACK | 0 PUSH | x0:x15 | x0:x15 | Push Register to Stack |
+| 10 STACK | 1 POP  | x0:x15 | x0:x15 | Pop Register from Stack |
 
 ## Registers:
 
