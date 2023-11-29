@@ -10,127 +10,95 @@ The computer can support 128KB of RAM and has a 16bit bus and instruction set.  
 The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed width commands.
 
 ### System Instructions
- | OPCODE (4) | SYSCODE (4) | Description |
- |------------|-------------|-------------|
- | 0 SYS | 0 NOP  | No Operation |
- | 0 SYS | 1 IN   | input from keyboard |
- | 0 SYS | 2 OUT  | output to display |
- | 0 SYS | 3 SET  | set register |
- | 0 SYS | 4 CLR  | clear register |
- | 0 SYS | 5 PUSH | push register to stack |
- | 0 SYS | 6 POP  | pop register from stack |
- | 0 SYS | 13 RET | return from JSR subroutine |
- | 0 SYS | 14 INT | interrupt handler |
- | 0 SYS | 15 HLT | halt cpu |
+ | OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
+ |-------|-------|--------|-------|--------------|
+ | 0 SYS | 0 NOP | x0:x15 | 0:x15 | No Operation |
+ | 0 SYS | 1 IN  | x0:x15 | 0:x15 | input from keyboard |
+ | 0 SYS | 2 OUT | x0:x15 | 0:x15 | output to display |
+ | 0 SYS | 3 SET | x0:x15 | 0:x15 | set register |
+ | 0 SYS | 4 CLR | x0:x15 | 0:x15 | clear register |
+ | 0 SYS | 14 INT| x0:x15 | 0:x15 | interrupt handler |
+ | 0 SYS | 15 HLT| x0:x15 | 0:x15 | halt cpu |
 
 
 ### Memory Instructions
 
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|  ---------------|---------------|-----------|------------|-------------|
-| 1 LD | 0 | x0:x7 | 0 | x0:x7 | 0:F | Load from memory |
-| 2 ST | 0 | x0:x7 | 0 | x0:x7 | 0:F | Store to memory |
+ | OPCODE (4) | DEST (4) | VAL (8) | Description |
+ |-------|---------|-------------|--------------|
+ | 1 LLI |  x0:x15 | lower value | Load lower 8 bits |
+ | 2 LUI |  x0:x15 | upper value | Load upper 8 bits |
 
-#### Immediate Instructions
+ | OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
+ |-------|-------|--------|--------|--------------|
+ | 3 MEM | 1 LD  | x0:x15 | x0:x15 | Load from register |
+ | 3 MEM | 2 ST  | x0:x15 | x0:x15 | Store to register |
+ | 3 MEM | 3 LD* | x0:x15 | x0:x15 | Load from memory |
+ | 3 MEM | 4 ST* | x0:x15 | x0:x15 | Store to memory |
 
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|-----------|-------------|
-| 1 LLI | 1 | x0:x7 | 00:FF | Upper 8 bits |
-| 2 LUI | 1 | x0:x7 | 00:FF | Lower 8 bits |
 
 ### Arithmetic/Logic Instructions
 
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
+| OPCODE (4) | FUNCT (4) | DEST (3) | SRC (4) | Description |
 |------------|---------------|  ---------------|--------------|------------|------------|-------------|
-| 3 ADD  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Add |
-| 4 SUB  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Subtract |
-| 5 MLT  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Multiply |
-| 6 DIV  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Divide |
-| 7 AND  | 0 | x0:x7 | 0 | x0:x7 | 0:F | And |
-| 8 OR   | 0 | x0:x7 | 0 | x0:x7 | 0:F | Or |
-| 9 XOR  | 0 | x0:x7 | 0 | x0:x7 | 0:F | Xor |
-| A SL   | 0 | x0:x7 | 0 | x0:x7 | 0:F | Shift Left |
-| B SR   | 0 | x0:x7 | 0 | x0:x7 | 0:F | Shift Right |
-
-#### Immediate Instructions
-
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|-----------|-------------|
-| 3 ADDI  | 1 | x0:x7 | 00:FF | Add |
-| 4 SUBI  | 1 | x0:x7 | 00:FF | Subtract |
-| 5 MLTI  | 1 | x0:x7 | 00:FF | Multiply |
-| 6 DIVI  | 1 | x0:x7 | 00:FF | Divide |
-| 7 ANDI  | 1 | x0:x7 | 00:FF | And |
-| 8 ORI   | 1 | x0:x7 | 00:FF | Or |
-| 9 XORI  | 1 | x0:x7 | 00:FF | Xor |
-| A SLI   | 1 | x0:x7 | 00:FF | Shift Left |
-| B SRI   | 1 | x0:x7 | 00:FF | Shift Right |
+| 4 MATH | 0 ADD | x0:x15 | x0:x15 | Add |
+| 4 MATH | 1 SUB | x0:x15 | x0:x15 | Subtract |
+| 4 MATH | 2 ADC | x0:x15 | x0:x15 | Add with Carry |
+| 4 MATH | 3 SBC | x0:x15 | x0:x15 | Subtract with Carry |
+| 5 LOGIC | 0 AND | x0:x15 | x0:x15 | And |
+| 5 LOGIC | 1 OR  | x0:x15 | x0:x15 | Or |
+| 5 LOGIC | 2 XOR | x0:x15 | x0:x15 | Xor |
+| 5 LOGIC | 3 NOT | x0:x15 | x0:x15 | Xor |
+| 6 SHIFT | 0 SLA  | x0:x15 | x0:x15 | Shift Left Arithmetic |
+| 6 SHIFT | 1 SRA  | x0:x15 | x0:x15 | Shift Right Arithmetic|
+| 6 SHIFT | 2 SLL  | x0:x15 | x0:x15 | Shift Left Logical |
+| 6 SHIFT | 3 SRL  | x0:x15 | x0:x15 | Shift Right Logical|
+| 7 MULT | 0 MLT | x0:x15 | x0:x15 | Multiply |
+| 7 MULT | 1 DIV  | x0:x15 | x0:x15 | Divide |
+| 7 MULT | 2 MOD | x0:x15 | x0:x15 | Modulus |
 
 
 ### Branch Instructions
 
 * Jump is relative to the current instruction pointer.
 
-| OPCODE (4) | DIRECTION (1) | DISTANCE (11) | Description |
-|------------|---------------|---------------|-------------|
-| C JMP | 0 | 000:4FF | Jump |
-| D JSR | 0 | 000:4FF | Jump to Subroutine |
-
-### Compare Instructions
-
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|-----------------|--------------|------------|------------|-------------|
-| E CMP | 0 | x0:x7 | 0 | x0:x7 | 0:F | Compare |
-
-#### Immediate Instructions
-
-| OPCODE (4) | IMMEDIATE (1) | DESTINATION (3) | VALUE (8) | Description |
-|------------|---------------|-----------------|-----------|-------------|
-| E CMPI | 1 | x0:x7 | 00:FF | Compare |
+| OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
+|--------|--------|--------|--------|--------------|
+| 8 JUMP | 0 JALR | x0:x15 | x0:x15 | Jump And Link Register |
 
 ### Branch Instructions
 
-| OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | INDIRECT (1) | SOURCE (3) | OFFSET (4) | Description |
-|------------|---------------|----------------|--------------|------------|------------|-------------|
-| F BR | 0 | 0 ZS (EQ) | 0 | x0:x7 | 0:F | Branch if Zero Set |
-| F BR | 0 | 1 ZC (NE) | 0 | x0:x7 | 0:F | Branch if Zero Clear |
-| F BR | 0 | 2 NS (LT) | 0 | x0:x7 | 0:F | Branch if Negative Set |
-| F BR | 0 | 3 NC (GE) | 0 | x0:x7 | 0:F | Branch if Negative Clear |
-| F BR | 0 | 4 CS      | 0 | x0:x7 | 0:F | Branch if Carry Set |
-| F BR | 0 | 5 CC      | 0 | x0:x7 | 0:F | Branch if Carry Clear |
-| F BR | 0 | 6 OS      | 0 | x0:x7 | 0:F | Branch if Overflow Set |
-| F BR | 0 | 7 OC      | 0 | x0:x7 | 0:F | Branch if Overflow Clear |
+| OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
+|--------|--------|--------|--------|--------------|
+| 9 BRANCH | 0 ZS (EQ) | x0:x15 | x0:x15 | Branch if Zero Set |
+| 9 BRANCH | 1 ZC (NE) | x0:x15 | x0:x15 | Branch if Zero Clear |
+| 9 BRANCH | 2 NS (LT) | x0:x15 | x0:x15 | Branch if Negative Set |
+| 9 BRANCH | 3 NC (GE) | x0:x15 | x0:x15 | Branch if Negative Clear |
+| 9 BRANCH | 4 CS      | x0:x15 | x0:x15 | Branch if Carry Set |
+| 9 BRANCH | 5 CC      | x0:x15 | x0:x15 | Branch if Carry Clear |
+| 9 BRANCH | 6 OS      | x0:x15 | x0:x15 | Branch if Overflow Set |
+| 9 BRANCH | 7 OC      | x0:x15 | x0:x15 | Branch if Overflow Clear |
 
-#### Immediate Instructions
-
-* Immediate branching is relative distance from the current instruction pointer.
-
-| OPCODE (4) | IMMEDIATE (1) | COMPARATOR (3) | DIRECTION (1) | DISTANCE (7) | Description |
-|------------|---------------|----------------|---------------|--------------|-------------|
-| F BRI | 1 | 0 ZS (EQ) | 0 | 00:8F | Branch if Zero Set |
-| F BRI | 1 | 1 ZC (NE) | 0 | 00:8F | Branch if Zero Clear |
-| F BRI | 1 | 2 NS (LT) | 0 | 00:8F | Branch if Negative Set |
-| F BRI | 1 | 3 NC (GE) | 0 | 00:8F | Branch if Negative Clear |
-| F BRI | 1 | 4 CS      | 0 | 00:8F | Branch if Carry Set |
-| F BRI | 1 | 5 CC      | 0 | 00:8F | Branch if Carry Clear |
-| F BRI | 1 | 6 OS      | 0 | 00:8F | Branch if Overflow Set |
-| F BRI | 1 | 7 OC      | 0 | 00:8F | Branch if Overflow Clear |
-
-* Indirect instructions use the value in the source register as the address in memory to load the value from.
-* Offset is added after the value is loaded from memory.
 
 ## Registers:
 
 | Register | Label | Alias | Description |
 |----------|-------|-------|-------------|
-| 0 | X0 | PC | Program Counter |
-| 1 | X1 | SP | Stack Pointer |
-| 2 | X2 | A1 | Argument 1 |
-| 3 | X3 | A2 | Argument 2 |
-| 4 | X4 | A3 | Argument 3 |
-| 5 | X5 | A4 | Argument 4 |
-| 6 | X6 | A5 | Argument 5 |
-| 7 | X7 | A6 | Temp (used for imm/ind instructions)|
+| 0 | X0 | ZERO | Always Zero |
+| 1 | X1 | PC | Program Counter |
+| 2 | X2 | SP | Stack Pointer |
+| 3 | X3 | BA | Branch Address |
+| 4 | X4 | RA | Return Address |
+| 5 | X5 | S0 | Saved 0 |
+| 6 | X6 | S1 | Saved 1 |
+| 7 | X7 | S2 | Saved 2 |
+| 8 |  X8  | A0 | Argument 0 |
+| 9 |  X9  | A1 | Argument 1 |
+| 10 | X10 | A2 | Argument 2 |
+| 11 | X11 | A3 | Argument 3 |
+| 12 | X12 | A4 | Argument 4 |
+| 13 | X13 | A5 | Argument 5 |
+| 14 | X14 | A6 | Argument 6 |
+| 15 | X15 | RES | Reserved |
 
 ## Setup
 

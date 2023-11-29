@@ -256,28 +256,16 @@ module controller (
               end
             end
           end
-          8 : begin //JAL
+          8 : begin //JALR
             case (counter)
-              3 : begin
+              3 : begin // store PC
                 reg_src_sel <= PC;
-                reg_dst_sel <= RA;
+                reg_dst_sel <= dst;
                 reg_out_en <= 1;
                 reg_in_en <= 1;
               end
-              4 : begin // store offset in RES
-                ctl_out_en <= 1;
-                reg_dst_sel <= RES;
-                reg_in_en <= 1;
-              end
-              5 : begin // ADD Offset to target register
-                reg_src_sel <= funct;
-                reg_dst_sel <= RES;
-                alu_opcode <= ADD; // Add
-                alu_out_en <= 1;
-                reg_in_en <= 1;
-              end
-              6 : begin // Jump to address in RES
-                reg_src_sel <= RES;
+              4 : begin // Jump to address
+                reg_src_sel <= src;
                 reg_dst_sel <= PC;
                 reg_out_en <= 1;
                 reg_in_en <= 1;

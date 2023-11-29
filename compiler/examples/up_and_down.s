@@ -1,15 +1,15 @@
       LLI  a0, 0x00
-      LLI  t0, 0x01
+      LLI  s0, 0x01
 			LLI  a1, 0xFF
 up:   OUT  a0
-      ADD  a0, t0
+      ADD  a0, s0
       LLI  ba, :down
 			BEQ  a0, a1
       LLI  ba, :up
-			BEQ  x0, x0
+			JALR x0, ba
 down: OUT  a0
-      SUB  a0, t0
+      SUB  a0, s0
 			LLI ba, :up
 			BEQ a0, x0
 			LLI ba, :down
-			BEQ x0, x0
+			JALR x0, ba
