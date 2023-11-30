@@ -15,9 +15,11 @@ down: OUT  a0
 			BEQ a0, x0, :up
 			JMP :down
 
-delay: LLI a2, 0xFF
-			 LUI a2, 0xFF
+delay: LLI  a2, :timer
+			 LDP a2, a2
 loop:  SUB a2, s0
 			 NOP
 			 BNE a2, x0, :loop
 			 RET
+
+timer: 0xFF 0xFF
