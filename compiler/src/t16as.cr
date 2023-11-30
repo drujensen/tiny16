@@ -1,9 +1,17 @@
 class T16as
   VERSION = "0.1.0"
+  property aliases = {} of String => String
   property opcodes = {} of String => String
   property registers = {} of String => String
 
   def initialize
+    # aliases for tiny16 computer
+    self.aliases = {
+      "JMP" => "JALR X0 BA",
+      "JSR" => "JALR RA BA",
+      "RET" => "JALR X0 RA",
+    }
+
     # opcodes for tiny16 computer
     self.opcodes = {
       "NOP"  => "00000000",
@@ -14,7 +22,6 @@ class T16as
       "INT"  => "00001110",
       "HLT"  => "00001111",
       "LLI"  => "0001",
-      "LDI"  => "0001",
       "LUI"  => "0010",
       "LD"   => "00110100",
       "ST"   => "00111000",
@@ -146,35 +153,6 @@ class T16as
     # remove extra spaces
     program = program.map { |line| line.gsub(/\s+/, " ") }
 
-    # track labels with their line number
-    labels = {} of String => Int32
-    program.each_with_index do |line, index|
-      if line.matches?(/^[a-zA-Z]+:\s/)
-        labels[line.split(": ")[0]] = index
-        program[index] = line.split(": ")[1].strip
-      end
-    end
-
-    puts "labels: #{labels}"
-
-    # replace labels with position
-    puts "replacing labels with position"
-    program.each_with_index do |line, index|
-      if line.matches?(/:[a-zA-Z]+$/)
-        label = line.split(":")[1].strip
-        addr = labels[label]
-        replace = addr.to_s(2).rjust(8, '0')
-
-        if line.includes?("LUI") # upper 8 bits of address
-          replace = (addr >> 8).to_s(2).rjust(8, '0')
-        end
-
-        program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
-      end
-    end
-    puts program
-
-    # replace characters with 8-bit ascii binary
     puts "replacing characters with 8-bit ascii binary"
     program = program.map do |line|
       line.gsub(/'.'/) do |match|
@@ -183,7 +161,7 @@ class T16as
     end
     puts program
 
-    # replace strings with 8-bit ascii binary
+    puts "replace strings with 8-bit ascii binary"
     program = program.map do |line|
       if line.includes? "\""
         parts = line.split("\"")
@@ -196,7 +174,6 @@ class T16as
     end.flatten
     puts program
 
-    # replace hex 0x? numbers with binary
     puts "replacing hex 0x? numbers with binary"
     program = program.map do |line|
       line.gsub(/0x[0-9a-fA-F]+/) do |match|
@@ -205,7 +182,6 @@ class T16as
     end
     puts program
 
-    # replace hex 0b? numbers with binary
     puts "replacing hex 0b? numbers with binary"
     program = program.map do |line|
       line.gsub(/0b[0-1]+/) do |match|
@@ -214,15 +190,14 @@ class T16as
     end
     puts program
 
-    # replace decimal numbers with binary
     puts "replacing decimal numbers with binary"
     program = program.map do |line|
       line.gsub(/0d\d+/) do |match|
         match[2..-1].to_i.to_s(2).rjust(8, '0')
       end
     end
+    puts program
 
-    # replace lowercase with uppercase
     puts "replacing lowercase with uppercase"
     program = program.map do |line|
       line.gsub(/[a-z]+/) do |match|
@@ -231,7 +206,65 @@ class T16as
     end
     puts program
 
-    # replace opcodes with binary
+    puts "replacing aliases"
+    regex = /(#{aliases.keys.join("|")})(?=\s|$)/
+    program = program.map do |line|
+      line.gsub(regex) do |match|
+        aliases[match]
+      end
+    end
+    puts program
+
+    # track labels with their line number
+    labels = {} of String => Int32
+    additional_lines = 0
+    program.each_with_index do |line, index|
+      if line.matches?(/^(LDI).*:[a-zA-Z]+$/)
+        additional_lines += 1
+      end
+      if line.matches?(/^(JALR|BEQ|BNE|BGE|BTL).*:[a-zA-Z]+$/)
+        additional_lines += 2
+      end
+      if line.matches?(/^[a-zA-Z]+:\s/)
+        labels[line.split(": ")[0]] = index + additional_lines
+        program[index] = line.split(": ")[1].strip
+      end
+    end
+
+    puts "identifying labels: #{labels}"
+
+    # replace labels with position
+    puts "replacing labels with position"
+    program.each_with_index do |line, index|
+      if line.matches?(/:[a-zA-Z]+$/)
+        label = line.split(":")[1].strip
+        addr = labels[label]
+
+        if line.includes?("LUI") # upper 8 bits of address
+          replace = (addr >> 8).to_s(2).rjust(8, '0')
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+        elsif line.includes?("LDI") # insert 16-bit address
+          program.insert(index, program[index])
+          replace = addr.to_s(2).rjust(8, '0')
+          program[index] = line.gsub(/LDI+$/, "LLI")
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+          replace = (addr >> 8).to_s(2).rjust(8, '0')
+          program[index - 1] = line.gsub(/LDI+$/, "LUI")
+          program[index - 1] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+        elsif line.includes?("JALR") || line.includes?("BEQ") || line.includes?("BNE") || line.includes?("BLT") || line.includes?("BGE") # insert 16-bit address
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "")
+          replace = addr.to_s(2).rjust(8, '0')
+          program.insert(index, "LLI BA #{replace}")
+          replace = (addr >> 8).to_s(2).rjust(8, '0')
+          program.insert(index, "LUI BA #{replace}")
+        else
+          replace = addr.to_s(2).rjust(8, '0')
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+        end
+      end
+    end
+    puts program
+
     puts "replacing opcodes with binary"
     regex = /(#{opcodes.keys.join("|")})(?=\s|$)/
     program = program.map do |line|
@@ -241,7 +274,6 @@ class T16as
     end
     puts program
 
-    # replace registers with binary
     puts "replacing registers with binary"
     program = program.map do |line|
       line.gsub(/(#{registers.keys.join("|")})(?=\s|$)/) do |match|
@@ -250,7 +282,6 @@ class T16as
     end
     puts program
 
-    # left justify all lines to 16 bits
     puts "left justify all lines to 16 bits"
     program = program.map do |line|
       line.gsub(" ", "").ljust(16, '0')
