@@ -161,6 +161,26 @@ class T16as
     end.flatten
     puts program
 
+    puts "replacing LDI with LLI and LUI"
+    program.each_with_index do |line, index|
+      regex = /^LDI.*0x([0-9a-fA-Z]+)$/
+      if match = line.match(regex)
+        if capture = match.captures.join
+          value = capture.to_i(16)
+          program.insert(index, program[index])
+
+          replace = (value >> 8).to_s(2).rjust(8, '0')
+          program[index] = program[index].gsub("LDI", "LUI")
+          program[index] = program[index].gsub(/0x[0-9A-Z]+$/, replace)
+
+          replace = value.to_s(2).rjust(8, '0')
+          program[index + 1] = program[index + 1].gsub("LDI", "LLI")
+          program[index + 1] = program[index + 1].gsub(/0x[0-9A-Z]+$/, replace)
+        end
+      end
+    end
+    puts program
+
     puts "replacing hex 0x? numbers with binary"
     program = program.map do |line|
       line.gsub(/0x[0-9a-fA-F]+/) do |match|
@@ -224,17 +244,20 @@ class T16as
           program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
         elsif line.includes?("LDI") # insert 16-bit address
           program.insert(index, program[index])
-          replace = addr.to_s(2).rjust(8, '0')
-          puts line.gsub(/^(LDI)/, "LLI")
-          program[index] = line.gsub(/^(LDI)/, "LLI")
-          program[index] = program[index].gsub(/:[a-zA-Z]+$/, "#{replace}")
+
           replace = (addr >> 8).to_s(2).rjust(8, '0')
-          program[index + 1] = line.gsub(/^(LDI)/, "LUI")
+          program[index] = program[index].gsub(/^(LDI)/, "LUI")
+          program[index] = program[index].gsub(/:[a-zA-Z]+$/, "#{replace}")
+
+          replace = addr.to_s(2).rjust(8, '0')
+          program[index + 1] = program[index + 1].gsub(/^(LDI)/, "LLI")
           program[index + 1] = program[index + 1].gsub(/:[a-zA-Z]+$/, "#{replace}")
-        elsif line.includes?("JALR") || line.includes?("BEQ") || line.includes?("BNE") || line.includes?("BLT") || line.includes?("BGE") # insert 16-bit address
+        elsif line.matches?(/^(JALR|BEQ|BNE|BLT|BGE).*/)
           program[index] = line.gsub(/:[a-zA-Z]+$/, "")
+
           replace = addr.to_s(2).rjust(8, '0')
           program.insert(index, "LLI BA #{replace}")
+
           replace = (addr >> 8).to_s(2).rjust(8, '0')
           program.insert(index, "LUI BA #{replace}")
         else
