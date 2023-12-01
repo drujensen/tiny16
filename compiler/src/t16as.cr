@@ -87,8 +87,8 @@ class T16as
       "BCC"  => "10010101",
       "BOS"  => "10010110",
       "BOC"  => "10010111",
-      "PSH"  => "10100101",
-      "POP"  => "10100110",
+      "PSH"  => "10100000",
+      "POP"  => "10100001",
     } of String => String
 
     self.registers = {
@@ -164,7 +164,7 @@ class T16as
     puts "replacing hex 0x? numbers with binary"
     program = program.map do |line|
       line.gsub(/0x[0-9a-fA-F]+/) do |match|
-        match[2..-1].to_i(16).to_s(2).rjust(8, '0')
+        match[2..-1].chars.map { |c| c.to_i(16).to_s(2).rjust(4, '0') }.join
       end
     end
     puts program
@@ -172,15 +172,7 @@ class T16as
     puts "replacing hex 0b? numbers with binary"
     program = program.map do |line|
       line.gsub(/0b[0-1]+/) do |match|
-        match[2..-1].to_i(2).to_s(2).rjust(8, '0')
-      end
-    end
-    puts program
-
-    puts "replacing decimal numbers with binary"
-    program = program.map do |line|
-      line.gsub(/0d\d+/) do |match|
-        match[2..-1].to_i.to_s(2).rjust(8, '0')
+        match[2..-1].chars.map { |c| c.to_i(2).to_s(2).rjust(4, '0') }.join
       end
     end
     puts program
@@ -233,11 +225,12 @@ class T16as
         elsif line.includes?("LDI") # insert 16-bit address
           program.insert(index, program[index])
           replace = addr.to_s(2).rjust(8, '0')
-          program[index] = line.gsub(/LDI+$/, "LLI")
-          program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+          puts line.gsub(/^(LDI)/, "LLI")
+          program[index] = line.gsub(/^(LDI)/, "LLI")
+          program[index] = program[index].gsub(/:[a-zA-Z]+$/, "#{replace}")
           replace = (addr >> 8).to_s(2).rjust(8, '0')
-          program[index - 1] = line.gsub(/LDI+$/, "LUI")
-          program[index - 1] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
+          program[index + 1] = line.gsub(/^(LDI)/, "LUI")
+          program[index + 1] = program[index + 1].gsub(/:[a-zA-Z]+$/, "#{replace}")
         elsif line.includes?("JALR") || line.includes?("BEQ") || line.includes?("BNE") || line.includes?("BLT") || line.includes?("BGE") # insert 16-bit address
           program[index] = line.gsub(/:[a-zA-Z]+$/, "")
           replace = addr.to_s(2).rjust(8, '0')

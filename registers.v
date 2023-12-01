@@ -31,7 +31,7 @@ module registers (
     if (rst) begin
       gpr[0]  <= 16'h0000;
       gpr[1]  <= 16'h0000;
-      gpr[2]  <= 16'h00FF;
+      gpr[2]  <= 16'h0100;
       gpr[3]  <= 16'h0000;
       gpr[4]  <= 16'h0000;
       gpr[5]  <= 16'h0000;

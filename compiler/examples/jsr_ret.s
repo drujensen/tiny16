@@ -1,5 +1,5 @@
-init:		LDI A1 0x5
-				LDI A2 0x7
+init:		LLI A1 0x05
+				LLI A2 0x07
 				JSR :add
 				OUT A1
 				HLT

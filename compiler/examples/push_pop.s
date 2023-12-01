@@ -1,6 +1,6 @@
-			LDI A1 0x8
+			LLI A1 0x08
 			PSH A1
-			LDI A1 0x2
+			LLI A1 0x02
 			PSH A1
 			POP A2
 			LD  A1 A2

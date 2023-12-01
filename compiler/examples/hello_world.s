@@ -1,9 +1,20 @@
 ; print hello world
-init:	LDI   A1  :txt  ; load direct "txt" address to A
-next: LD    A2, *A1	; load indirect value at A1 to A2
-			OUT		A2  ; output A
-			ADDI  A1, 0x1  ; increment A1
-			CMPI  A2, 0x0  ; compare to 0x0
-			BRI   NE  :next  ; branch to init if equal
-      JMP   :init
+			 LLI s0, 0x01
+init:	 LLI a1, :txt       ; load direct "txt" address to A
+next:  LDP a2, a1	        ; load indirect value at A1 to A2
+			 OUT a2             ; output A
+			 JSR :delay         ; delay
+			 ADD a1, s0         ; increment A1
+			 BNE a2, x0, :next  ; branch to init if equal
+       JMP :init
+
+delay: LLI a3, :timer
+			 LDP a3, a3
+loop:  SUB a3, s0
+			 NOP
+			 BNE a3, x0, :loop
+			 RET
+
+timer: 0xFFFF
+
 txt:  "Hello World!"
