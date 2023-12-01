@@ -124,6 +124,38 @@ class T16as
       "X13"  => "1101",
       "X14"  => "1110",
       "X15"  => "1111",
+      "zero" => "0000",
+      "pc"   => "0001",
+      "sp"   => "0010",
+      "ba"   => "0011",
+      "ra"   => "0100",
+      "s0"   => "0101",
+      "s1"   => "0110",
+      "s2"   => "0111",
+      "a0"   => "1000",
+      "a1"   => "1001",
+      "a2"   => "1010",
+      "a3"   => "1011",
+      "a4"   => "1100",
+      "a5"   => "1101",
+      "a6"   => "1110",
+      "a7"   => "1111",
+      "x0"   => "0000",
+      "x1"   => "0001",
+      "x2"   => "0010",
+      "x3"   => "0011",
+      "x4"   => "0100",
+      "x5"   => "0101",
+      "x6"   => "0110",
+      "x7"   => "0111",
+      "x8"   => "1000",
+      "x9"   => "1001",
+      "x10"  => "1010",
+      "x11"  => "1011",
+      "x12"  => "1100",
+      "x13"  => "1101",
+      "x14"  => "1110",
+      "x15"  => "1111",
     } of String => String
   end
 
@@ -139,6 +171,15 @@ class T16as
 
     # remove extra spaces
     program = program.map { |line| line.gsub(/\s+/, " ") }
+
+    puts "replacing aliases"
+    regex = /(#{aliases.keys.join("|")})(?=\s|$)/
+    program = program.map do |line|
+      line.gsub(regex) do |match|
+        aliases[match]
+      end
+    end
+    puts program
 
     puts "replacing characters with 8-bit ascii binary"
     program = program.map do |line|
@@ -163,9 +204,8 @@ class T16as
 
     puts "replacing LDI with LLI and LUI"
     program.each_with_index do |line, index|
-      regex = /^LDI.*0x([0-9a-fA-Z]+)$/
-      if match = line.match(regex)
-        if capture = match.captures.join
+      if match = line.match(/^LDI.*0x([0-9a-fA-Z]+)$/)
+        if capture = match.captures[0]
           value = capture.to_i(16)
           program.insert(index, program[index])
 
@@ -176,6 +216,22 @@ class T16as
           replace = value.to_s(2).rjust(8, '0')
           program[index + 1] = program[index + 1].gsub("LDI", "LLI")
           program[index + 1] = program[index + 1].gsub(/0x[0-9A-Z]+$/, replace)
+          program[index + 1] = program[index + 1].gsub(/^[0-9a-zA-Z]+:/, "")
+        end
+      end
+
+      if match = line.match(/LDI.*(:[0-9a-zA-Z]+)$/)
+        program.insert(index, program[index])
+        program[index] = program[index].gsub("LDI", "LUI")
+        program[index + 1] = program[index + 1].gsub("LDI", "LLI")
+        program[index + 1] = program[index + 1].gsub(/^[0-9a-zA-Z]+:/, "")
+      end
+
+      if match = line.match(/(JALR|BEQ|BNE|BLT|BGE).*(:[0-9a-zA-Z]+)$/)
+        if capture = match.captures[1]
+          program[index] = line.gsub(/:[a-zA-Z]+$/, "")
+          program.insert(index, "LLI BA #{capture}")
+          program.insert(index, "LUI BA #{capture}")
         end
       end
     end
@@ -197,39 +253,14 @@ class T16as
     end
     puts program
 
-    puts "replacing lowercase with uppercase"
-    program = program.map do |line|
-      line.gsub(/[a-z]+/) do |match|
-        match.upcase
-      end
-    end
-    puts program
-
-    puts "replacing aliases"
-    regex = /(#{aliases.keys.join("|")})(?=\s|$)/
-    program = program.map do |line|
-      line.gsub(regex) do |match|
-        aliases[match]
-      end
-    end
-    puts program
-
     # track labels with their line number
     labels = {} of String => Int32
-    additional_lines = 0
     program.each_with_index do |line, index|
-      if line.matches?(/^(LDI).*:[a-zA-Z]+$/)
-        additional_lines += 1
-      end
-      if line.matches?(/^(JALR|BEQ|BNE|BGE|BTL).*:[a-zA-Z]+$/)
-        additional_lines += 2
-      end
       if line.matches?(/^[a-zA-Z]+:\s/)
-        labels[line.split(": ")[0]] = index + additional_lines
+        labels[line.split(": ")[0]] = index
         program[index] = line.split(": ")[1].strip
       end
     end
-
     puts "identifying labels: #{labels}"
 
     # replace labels with position
@@ -242,24 +273,6 @@ class T16as
         if line.includes?("LUI") # upper 8 bits of address
           replace = (addr >> 8).to_s(2).rjust(8, '0')
           program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
-        elsif line.includes?("LDI") # insert 16-bit address
-          program.insert(index, program[index])
-
-          replace = (addr >> 8).to_s(2).rjust(8, '0')
-          program[index] = program[index].gsub(/^(LDI)/, "LUI")
-          program[index] = program[index].gsub(/:[a-zA-Z]+$/, "#{replace}")
-
-          replace = addr.to_s(2).rjust(8, '0')
-          program[index + 1] = program[index + 1].gsub(/^(LDI)/, "LLI")
-          program[index + 1] = program[index + 1].gsub(/:[a-zA-Z]+$/, "#{replace}")
-        elsif line.matches?(/^(JALR|BEQ|BNE|BLT|BGE).*/)
-          program[index] = line.gsub(/:[a-zA-Z]+$/, "")
-
-          replace = addr.to_s(2).rjust(8, '0')
-          program.insert(index, "LLI BA #{replace}")
-
-          replace = (addr >> 8).to_s(2).rjust(8, '0')
-          program.insert(index, "LUI BA #{replace}")
         else
           replace = addr.to_s(2).rjust(8, '0')
           program[index] = line.gsub(/:[a-zA-Z]+$/, "#{replace}")
