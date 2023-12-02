@@ -67,14 +67,14 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 
 | OPCODE (4) | FUNCT (4) | DEST (4) | SRC (4) | Description |
 |--------|--------|--------|--------|--------------|
-| 9 BRANCH | 0 ZS (EQ) | x0:x15 | x0:x15 | Branch if Zero Set |
-| 9 BRANCH | 1 ZC (NE) | x0:x15 | x0:x15 | Branch if Zero Clear |
-| 9 BRANCH | 2 NS (LT) | x0:x15 | x0:x15 | Branch if Negative Set |
-| 9 BRANCH | 3 NC (GE) | x0:x15 | x0:x15 | Branch if Negative Clear |
-| 9 BRANCH | 4 CS      | x0:x15 | x0:x15 | Branch if Carry Set |
-| 9 BRANCH | 5 CC      | x0:x15 | x0:x15 | Branch if Carry Clear |
-| 9 BRANCH | 6 OS      | x0:x15 | x0:x15 | Branch if Overflow Set |
-| 9 BRANCH | 7 OC      | x0:x15 | x0:x15 | Branch if Overflow Clear |
+| 9 BRANCH | 0 BEQ | x0:x15 | x0:x15 | Branch if Zero Set |
+| 9 BRANCH | 1 BNE | x0:x15 | x0:x15 | Branch if Zero Clear |
+| 9 BRANCH | 2 BLT | x0:x15 | x0:x15 | Branch if Negative Set |
+| 9 BRANCH | 3 BGE | x0:x15 | x0:x15 | Branch if Negative Clear |
+| 9 BRANCH | 4 BCS | x0:x15 | x0:x15 | Branch if Carry Set |
+| 9 BRANCH | 5 BCC | x0:x15 | x0:x15 | Branch if Carry Clear |
+| 9 BRANCH | 6 BOS | x0:x15 | x0:x15 | Branch if Overflow Set |
+| 9 BRANCH | 7 BOC | x0:x15 | x0:x15 | Branch if Overflow Clear |
 
 
 ### Stack Instructions
@@ -92,18 +92,46 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 | 1 | X1 | PC | Program Counter |
 | 2 | X2 | SP | Stack Pointer |
 | 3 | X3 | BA | Branch Address |
-| 4 | X4 | RA | Return Address |
+| 4 | X4 | RA | Return Address (Saved) |
 | 5 | X5 | S0 | Saved 0 |
 | 6 | X6 | S1 | Saved 1 |
 | 7 | X7 | S2 | Saved 2 |
-| 8 |  X8  | A0 | Argument 0 |
-| 9 |  X9  | A1 | Argument 1 |
-| 10 | X10 | A2 | Argument 2 |
-| 11 | X11 | A3 | Argument 3 |
-| 12 | X12 | A4 | Argument 4 |
-| 13 | X13 | A5 | Argument 5 |
-| 14 | X14 | A6 | Argument 6 |
-| 15 | X15 | RES | Reserved |
+| 8 | X8 | S3 | Saved 3 |
+| 9 | X9 | S4 | Saved 4 |
+| 10 | X10 | A0 | Argument 0 / Return 0 |
+| 11 | X11 | A1 | Argument 1 |
+| 12 | X12 | A2 | Argument 2 |
+| 13 | X13 | A3 | Argument 3 |
+| 14 | X14 | A4 | Argument 4 |
+| 15 | X15 | A5 | Reserved |
+
+## Alias Instructions
+
+| Alias         | Instructions |
+|---------------|--------------|
+| LDI Rd 0xhhll | LUI Rd 0xhh  |
+|               | LLI Rd 0xll  |
+| LDI Rd :label | LUI Rd :label[15:8] |
+|               | LLI Rd :label[7:0]  |
+| JMP :delay    | LUI BA :label[15:8] |
+|               | LLI BA :label[7:0]  |
+|               | JALR X0 BA   |
+| JSR :delay    | LUI BA :label[15:8] |
+|               | LLI Rd :label[7:0]  |
+|               | JALR RA BA   |
+| RET           | JALR X0 RA   |
+| PSHR          | PSH S4       |
+|               | PSH S3       |
+|               | PSH S2       |
+|               | PSH S1       |
+|               | PSH S0       |
+|               | PSH RA       |
+| POPR          | POP RA       |
+|               | POP S0       |
+|               | POP S1       |
+|               | POP S2       |
+|               | POP S3       |
+|               | POP S4       |
 
 ## Setup
 

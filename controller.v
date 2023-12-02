@@ -50,7 +50,10 @@ module controller (
   assign funct = inst[11:8];
   assign dst = inst[7:4];
   assign src = inst[3:0];
-  assign out = inst[7:0];
+
+  // if top 2 bits of instruction is math/logic/shift/mult
+  // then output 4 bits otherwise output 8 bits
+  assign out = (inst[15:14] == 1) ? inst[3:0] : inst[7:0];
 
   assign alu_funct = inst[13:10];
   assign imm = inst[9];
@@ -224,6 +227,7 @@ module controller (
                 end
                 4 : begin
                   reg_src_sel <= RES;
+                  reg_dst_sel <= dst;
                   alu_out_en <= 1;
                   reg_in_en <= 1;
                 end

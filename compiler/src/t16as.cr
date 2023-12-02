@@ -57,8 +57,6 @@ class T16as
       "SRAI" => "01110110",
       "SLLI" => "01111010",
       "SRLI" => "01111110",
-      "LDP"  => "00110010",
-      "STP"  => "00111011",
       "ADDP" => "01000001",
       "SUBP" => "01000101",
       "ADCP" => "01001001",
@@ -100,14 +98,14 @@ class T16as
       "S0"   => "0101",
       "S1"   => "0110",
       "S2"   => "0111",
-      "A0"   => "1000",
-      "A1"   => "1001",
-      "A2"   => "1010",
-      "A3"   => "1011",
-      "A4"   => "1100",
-      "A5"   => "1101",
-      "A6"   => "1110",
-      "A7"   => "1111",
+      "S3"   => "1000",
+      "S4"   => "1001",
+      "A0"   => "1010",
+      "A1"   => "1011",
+      "A2"   => "1100",
+      "A3"   => "1101",
+      "A4"   => "1110",
+      "A5"   => "1111",
       "X0"   => "0000",
       "X1"   => "0001",
       "X2"   => "0010",
@@ -132,14 +130,14 @@ class T16as
       "s0"   => "0101",
       "s1"   => "0110",
       "s2"   => "0111",
-      "a0"   => "1000",
-      "a1"   => "1001",
-      "a2"   => "1010",
-      "a3"   => "1011",
-      "a4"   => "1100",
-      "a5"   => "1101",
-      "a6"   => "1110",
-      "a7"   => "1111",
+      "s3"   => "1000",
+      "s4"   => "1001",
+      "a0"   => "1010",
+      "a1"   => "1011",
+      "a2"   => "1100",
+      "a3"   => "1101",
+      "a4"   => "1110",
+      "a5"   => "1111",
       "x0"   => "0000",
       "x1"   => "0001",
       "x2"   => "0010",
@@ -174,9 +172,27 @@ class T16as
 
     puts "replacing aliases"
     regex = /(#{aliases.keys.join("|")})(?=\s|$)/
-    program = program.map do |line|
-      line.gsub(regex) do |match|
-        aliases[match]
+    program.each_with_index do |line, index|
+      if line.match(regex)
+        program[index] = line.gsub(regex) do |match|
+          aliases[match]
+        end
+      end
+      if line.includes? "PSHR"
+        program[index] = line.gsub("PSHR", "PSH RA")
+        program.insert(index + 1, "PSH S4")
+        program.insert(index + 1, "PSH S3")
+        program.insert(index + 1, "PSH S2")
+        program.insert(index + 1, "PSH S1")
+        program.insert(index + 1, "PSH S0")
+      end
+      if line.includes? "POPR"
+        program[index] = line.gsub("POPR", "POP S4")
+        program.insert(index + 1, "POP RA")
+        program.insert(index + 1, "POP S0")
+        program.insert(index + 1, "POP S1")
+        program.insert(index + 1, "POP S2")
+        program.insert(index + 1, "POP S3")
       end
     end
     puts program
@@ -227,7 +243,7 @@ class T16as
         program[index + 1] = program[index + 1].gsub(/^[0-9a-zA-Z]+:/, "")
       end
 
-      if match = line.match(/(JALR|BEQ|BNE|BLT|BGE).*(:[0-9a-zA-Z]+)$/)
+      if match = line.match(/(JALR|BEQ|BNE|BLT|BGE|BZS|BZC|BNS|BNC|BCS|BCC|BOS|BOC).*(:[0-9a-zA-Z]+)$/)
         if capture = match.captures[1]
           program[index] = line.gsub(/:[a-zA-Z]+$/, "")
           program.insert(index, "LLI BA #{capture}")
