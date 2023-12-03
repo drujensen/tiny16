@@ -5,6 +5,7 @@
 `include "bus.v"
 `include "display.v"
 `include "clock_divider.v"
+`include "pll.v"
 
 module tiny16 (
     input  CLK,            // 16MHz clock
@@ -16,13 +17,19 @@ module tiny16 (
     // drive USB pull-up resistor to '0' to disable USB
     assign USBPU = 0;
 
+    wire clk_48mhz;
+    wire clk_locked;
+
+    // Use an icepll generated pll
+    pll pll48( .clock_in(CLK), .clock_out(clk_48mhz), .locked( clk_locked ) );
+
     wire clk_1mhz;
 
     // instantiate the clock divider module
     clock_divider div (
-        .clk(CLK),
+        .clk_in(clk_48mhz),
         .rst(RST),
-        .clk_1mhz(clk_1mhz)
+        .clk_out(clk_1mhz)
     );
 
     wire mem_addr_en;

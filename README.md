@@ -5,6 +5,8 @@ has similar capabilites as a C6502 8bit system.
 
 The computer can support 128KB of RAM and has a 16bit bus and instruction set.  memory is 16bit per address location instead of 8bit. This keeps the system 16bit aligned with no special handling.  everything is 16bits.
 
+This project leverages the excellent work from [davidthings](https://github.com/davidthings/tinyfpga_bx_usbserial.git) to provide terminal access via /dev/ACM0.
+
 ## Instruction Set Architecture
 
 The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed width commands.

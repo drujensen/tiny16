@@ -9,15 +9,13 @@ module alu (
   output reg [3:0] flags //O C N Z
 );
 
-  wire [16:0] result;
+  reg [16:0] result;
+  wire [16:0] calc;
 
-  assign result = (opcode == 4'b0000) ? src1 + src2 : // ADD
+  assign calc   = (opcode == 4'b0000) ? src1 + src2 : // ADD
                   (opcode == 4'b0001) ? src1 - src2 : // SUB
                   (opcode == 4'b0010) ? src1 + src2 + flags[2] : // ADC
                   (opcode == 4'b0011) ? src1 - src2 - ~flags[2] : // SBC
-                  (opcode == 4'b0100) ? src1 * src2 : // MLT
-                  (opcode == 4'b0101) ? src1 / src2 : // DIV
-                  (opcode == 4'b0110) ? src1 % src2 : // MOD
                   (opcode == 4'b1000) ? src1 & src2 : // Bitwise AND
                   (opcode == 4'b1001) ? src1 | src2 : // Bitwise OR
                   (opcode == 4'b1010) ? src1 ^ src2 : // Bitwise XOR
@@ -30,7 +28,15 @@ module alu (
 
   assign out = result[15:0];
 
-  always @(posedge clk or posedge rst) begin
+  always @(posedge clk) begin
+    if (rst) begin
+      result <= 17'b0;
+    end else begin
+      result <= calc;
+    end
+  end
+  
+  always @(posedge clk) begin
     if (rst) begin
       flags <= 4'b0000;
     end else if (out_en) begin

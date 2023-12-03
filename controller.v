@@ -71,7 +71,7 @@ module controller (
    .counter(counter)
   );
 
-  always @(negedge clk) begin
+  always @(posedge clk) begin
     // Reset all signals
     alu_opcode <= 4'b0000;
     reg_src_sel <= 4'b0000;
