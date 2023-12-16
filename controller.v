@@ -5,26 +5,45 @@ module controller (
   input rst,
   input [15:0] in,
   input [3:0] flags,
-  output reg [3:0] alu_opcode,
-  output reg [3:0] reg_src_sel,
-  output reg [3:0] reg_dst_sel,
-  output reg alu_out_en,
-  output reg mem_addr_en,
-  output reg mem_in_en,
-  output reg mem_out_en,
-  output reg reg_in_en,
-  output reg reg_up_en,
-  output reg reg_lo_en,
-  output reg reg_pc_inc,
-  output reg reg_sp_inc,
-  output reg reg_sp_dec,
-  output reg reg_jp_en,
-  output reg reg_br_en,
-  output reg reg_out_en,
-  output reg ctl_out_en,
-  output reg dsp_in_en,
+  output reg [3:0] alu_opcode_next,
+  output reg [3:0] reg_src_sel_next,
+  output reg [3:0] reg_dst_sel_next,
+  output reg alu_out_en_next,
+  output reg mem_addr_en_next,
+  output reg mem_in_en_next,
+  output reg mem_out_en_next,
+  output reg reg_in_en_next,
+  output reg reg_up_en_next,
+  output reg reg_lo_en_next,
+  output reg reg_pc_inc_next,
+  output reg reg_sp_inc_next,
+  output reg reg_sp_dec_next,
+  output reg reg_jp_en_next,
+  output reg reg_br_en_next,
+  output reg reg_out_en_next,
+  output reg ctl_out_en_next,
+  output reg dsp_in_en_next,
   output [15:0] out
 );
+
+  reg [3:0] alu_opcode;
+  reg [3:0] reg_src_sel;
+  reg [3:0] reg_dst_sel;
+  reg alu_out_en;
+  reg mem_addr_en;
+  reg mem_in_en;
+  reg mem_out_en;
+  reg reg_in_en;
+  reg reg_up_en;
+  reg reg_lo_en;
+  reg reg_pc_inc;
+  reg reg_sp_inc;
+  reg reg_sp_dec;
+  reg reg_jp_en;
+  reg reg_br_en;
+  reg reg_out_en;
+  reg ctl_out_en;
+  reg dsp_in_en;
 
   parameter PC = 4'b0001; // program counter
   parameter SP = 4'b0010; // stack pointer
@@ -47,7 +66,10 @@ module controller (
   wire ind;
 
   assign opcode = inst[15:12];
+  assign alu_funct = inst[13:10];
   assign funct = inst[11:8];
+  assign imm = inst[9];
+  assign ind = inst[8];
   assign dst = inst[7:4];
   assign src = inst[3:0];
 
@@ -55,14 +77,10 @@ module controller (
   // then output 4 bits otherwise output 8 bits
   assign out = (inst[15:14] == 1) ? inst[3:0] : inst[7:0];
 
-  assign alu_funct = inst[13:10];
-  assign imm = inst[9];
-  assign ind = inst[8];
-
   wire step_reset;
   reg halt = 0;
 
-  assign step_reset = (counter == 6) ? 1 : 0;
+  assign step_reset = (counter == 7) ? 1 : 0;
 
   step step (
    .clk(clk),
@@ -70,6 +88,29 @@ module controller (
    .step_reset(step_reset),
    .counter(counter)
   );
+
+  // pipeline
+  always @(posedge clk) begin
+    // Reset all signals
+    alu_opcode_next <= alu_opcode;
+    reg_src_sel_next <= reg_src_sel;
+    reg_dst_sel_next <= reg_dst_sel;
+    alu_out_en_next <= alu_out_en;
+    mem_addr_en_next <= mem_addr_en;
+    mem_in_en_next <= mem_in_en;
+    mem_out_en_next <= mem_out_en;
+    reg_in_en_next <= reg_in_en;
+    reg_up_en_next <= reg_up_en;
+    reg_lo_en_next <= reg_lo_en;
+    reg_pc_inc_next <= reg_pc_inc;
+    reg_sp_inc_next <= reg_sp_inc;
+    reg_sp_dec_next <= reg_sp_dec;
+    reg_jp_en_next <= reg_jp_en;
+    reg_br_en_next <= reg_br_en;
+    reg_out_en_next <= reg_out_en;
+    ctl_out_en_next <= ctl_out_en;
+    dsp_in_en_next <= dsp_in_en;
+  end
 
   always @(posedge clk) begin
     // Reset all signals

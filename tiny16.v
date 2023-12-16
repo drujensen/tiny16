@@ -5,7 +5,7 @@
 `include "bus.v"
 `include "display.v"
 `include "clock_divider.v"
-`include "pll.v"
+//`include "pll.v"
 
 module tiny16 (
     input  CLK,            // 16MHz clock
@@ -21,13 +21,13 @@ module tiny16 (
     wire clk_locked;
 
     // Use an icepll generated pll
-    pll pll48( .clock_in(CLK), .clock_out(clk_48mhz), .locked( clk_locked ) );
+    //pll pll48( .clock_in(CLK), .clock_out(clk_48mhz), .locked( clk_locked ) );
 
     wire clk_1mhz;
 
     // instantiate the clock divider module
     clock_divider div (
-        .clk_in(clk_48mhz),
+        .clk_in(CLK),
         .rst(RST),
         .clk_out(clk_1mhz)
     );
@@ -106,22 +106,22 @@ module tiny16 (
         .rst(RST),
         .in(bus_out),
         .flags(alu_flags),
-        .alu_opcode(alu_opcode),
-        .alu_out_en(alu_out_en),
-        .mem_addr_en(mem_addr_en),
-        .mem_in_en(mem_in_en),
-        .mem_out_en(mem_out_en),
-        .reg_src_sel(reg_src_sel),
-        .reg_dst_sel(reg_dst_sel),
-        .reg_in_en(reg_in_en),
-        .reg_up_en(reg_up_en),
-        .reg_lo_en(reg_lo_en),
-        .reg_pc_inc(reg_pc_inc),
-        .reg_sp_inc(reg_sp_inc),
-        .reg_sp_dec(reg_sp_dec),
-        .reg_out_en(reg_out_en),
-        .ctl_out_en(ctl_out_en),
-        .dsp_in_en(dsp_in_en),
+        .alu_opcode_next(alu_opcode),
+        .alu_out_en_next(alu_out_en),
+        .mem_addr_en_next(mem_addr_en),
+        .mem_in_en_next(mem_in_en),
+        .mem_out_en_next(mem_out_en),
+        .reg_src_sel_next(reg_src_sel),
+        .reg_dst_sel_next(reg_dst_sel),
+        .reg_in_en_next(reg_in_en),
+        .reg_up_en_next(reg_up_en),
+        .reg_lo_en_next(reg_lo_en),
+        .reg_pc_inc_next(reg_pc_inc),
+        .reg_sp_inc_next(reg_sp_inc),
+        .reg_sp_dec_next(reg_sp_dec),
+        .reg_out_en_next(reg_out_en),
+        .ctl_out_en_next(ctl_out_en),
+        .dsp_in_en_next(dsp_in_en),
         .out(ctl_out)
     );
 
