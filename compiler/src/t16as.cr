@@ -222,13 +222,14 @@ class T16as
     program.each_with_index do |line, index|
       if match = line.match(/^LDI.*0x([0-9a-fA-Z]+)$/)
         if capture = match.captures[0]
-          value = capture.to_i(16)
           program.insert(index, program[index])
 
+          value = capture.to_i(16)
           replace = (value >> 8).to_s(2).rjust(8, '0')
           program[index] = program[index].gsub("LDI", "LUI")
           program[index] = program[index].gsub(/0x[0-9A-Z]+$/, replace)
 
+          value = capture[-2..-1].to_i(16)
           replace = value.to_s(2).rjust(8, '0')
           program[index + 1] = program[index + 1].gsub("LDI", "LLI")
           program[index + 1] = program[index + 1].gsub(/0x[0-9A-Z]+$/, replace)
