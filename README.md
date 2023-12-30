@@ -39,7 +39,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 ### Arithmetic/Logic Instructions
 
 | OPCODE (4) | FUNCT (4) | DEST (3) | SRC (4) | Description |
-|------------|---------------|  ---------------|--------------|------------|------------|-------------|
+|------------|-----------|----------|---------|-------------|
 | 4 MATH | 0 ADD | x0:x15 | x0:x15 | Add |
 | 4 MATH | 1 SUB | x0:x15 | x0:x15 | Subtract |
 | 4 MATH | 2 ADC | x0:x15 | x0:x15 | Add with Carry |
