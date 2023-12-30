@@ -32,8 +32,8 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
  |-------|-------|--------|--------|--------------|
  | 3 MEM | 1 LD  | x0:x15 | x0:x15 | Load from register |
  | 3 MEM | 2 ST  | x0:x15 | x0:x15 | Store to register |
- | 3 MEM | 3 LD* | x0:x15 | x0:x15 | Load from memory |
- | 3 MEM | 4 ST* | x0:x15 | x0:x15 | Store to memory |
+ | 3 MEM | 3 LDP | x0:x15 | x0:x15 | Load from memory |
+ | 3 MEM | 4 STP | x0:x15 | x0:x15 | Store to memory |
 
 
 ### Arithmetic/Logic Instructions
@@ -117,7 +117,7 @@ The system has 16 base opcodes.  This is the first 4 bits of the 16bit fixed wid
 |               | LLI BA :label[7:0]  |
 |               | JALR X0 BA   |
 | JSR :delay    | LUI BA :label[15:8] |
-|               | LLI Rd :label[7:0]  |
+|               | LLI BA :label[7:0]  |
 |               | JALR RA BA   |
 | RET           | JALR X0 RA   |
 | PSHR          | PSH S4       |
