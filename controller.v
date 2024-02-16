@@ -22,6 +22,8 @@ module controller (
   output reg reg_br_en,
   output reg reg_out_en,
   output reg ctl_out_en,
+  output reg kbd_trigger_en,
+  output reg kbd_out_en,
   output reg dsp_in_en,
   output [15:0] out
 );
@@ -62,7 +64,7 @@ module controller (
   wire step_reset;
   reg halt = 0;
 
-  assign step_reset = (counter == 6) ? 1 : 0;
+  assign step_reset = (counter == 7) ? 1 : 0;
 
   step step (
    .clk(clk),
@@ -88,6 +90,7 @@ module controller (
     reg_sp_dec <= 0;
     reg_out_en <= 0;
     ctl_out_en <= 0;
+    kbd_out_en <= 0;
     dsp_in_en <= 0;
 
     case (counter)
@@ -111,24 +114,26 @@ module controller (
               0 : begin // NOP
               end
               1 : begin // IN
+                case (counter)
+                  3: begin
+                    kbd_trigger_en <= 1;
+                  end
+                  7: begin
+                    reg_dst_sel <= dst;
+                    kbd_out_en <= 1;
+                    reg_in_en <= 1;
+                    kbd_trigger_en <= 0;
+                  end
+                endcase
               end
               2 : begin // OUT
-                reg_src_sel <= dst;
-                if (ind) begin
-                  case (counter)
-                    3 : begin
-                      reg_out_en <= 1;
-                      mem_addr_en <= 1;
-                    end
-                    4 : begin
-                      mem_out_en <= 1;
-                      dsp_in_en <= 1;
-                    end
-                  endcase
-                end else begin
-                  reg_out_en <= 1;
-                  dsp_in_en <= 1;
-                end
+                case (counter)
+                  3: begin
+                    reg_src_sel <= dst;
+                    reg_out_en <= 1;
+                    dsp_in_en <= 1;
+                  end
+                endcase
               end
               3 : begin // SET
               end

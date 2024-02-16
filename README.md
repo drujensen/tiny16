@@ -187,3 +187,14 @@ Install on the board:
 make prog
 ```
 
+# Contributing
+
+## TODO
+
+- [ ] add .text, .data, .end sections with address
+- [ ] implement uart for terminal support
+- [ ] create wozman for firmware operating system
+- [ ] support interrupts
+- [ ] support memory mapped devices
+- [ ] support flash for program storage
+- [ ] create c6502 transpiler

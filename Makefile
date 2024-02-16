@@ -12,6 +12,7 @@ SOURCES = \
 	clock_divider.v \
 	controller.v \
 	display.v \
+	keyboard.v \
 	memory.v \
 	registers.v \
 	step.v
@@ -39,11 +40,11 @@ all: $(PROJ).bin $(PROJ).tb
 %.tb: %_tb.v %.v
 	iverilog -o $@ $^
 
-prog: $(PROJ).bin
+upload: $(PROJ).bin
 	tinyprog -p $<
 
 clean:
 	rm -f $(PROJ).blif $(PROJ).asc $(PROJ).bin $(PROJ).tb $(PROJ).vcd
 
 .SECONDARY:
-.PHONY: all prog clean
+.PHONY: all upload clean

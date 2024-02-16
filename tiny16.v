@@ -3,6 +3,7 @@
 `include "alu.v"
 `include "controller.v"
 `include "bus.v"
+`include "keyboard.v"
 `include "display.v"
 `include "clock_divider.v"
 
@@ -10,7 +11,9 @@ module tiny16 (
     input  CLK,            // 16MHz clock
     input  RST,            // reset pin
     input  [7:0] IN,       // 8-bit input
+    output IN_EN,          // input enable
     output [7:0] OUT,      // 8-bit output
+    output OUT_EN,
     output USBPU           // USB pull-up resistor
 );
     // drive USB pull-up resistor to '0' to disable USB
@@ -114,8 +117,24 @@ module tiny16 (
         .reg_sp_dec(reg_sp_dec),
         .reg_out_en(reg_out_en),
         .ctl_out_en(ctl_out_en),
+        .kbd_trigger_en(kbd_trigger_en),
+        .kbd_out_en(kbd_out_en),
         .dsp_in_en(dsp_in_en),
         .out(ctl_out)
+    );
+
+    wire kbd_out_en;
+    wire kbd_trigger_en;
+    wire [15:0] kbd_out;
+
+    keyboard kbd (
+        .clk(clk_1mhz),
+        .rst(RST),
+        .in(IN),
+        .out_en(kbd_out_en),
+        .out(kbd_out),
+        .trigger_en(kbd_trigger_en),
+        .trigger(IN_EN)
     );
 
     wire [15:0] bus_out;
@@ -131,6 +150,8 @@ module tiny16 (
         .reg_out(reg_out),
         .ctl_out_en(ctl_out_en),
         .ctl_out(ctl_out),
+        .kbd_out_en(kbd_out_en),
+        .kbd_out(kbd_out),
         .out(bus_out)
     );
 
@@ -142,7 +163,8 @@ module tiny16 (
         .rst(RST),
         .in_en(dsp_in_en),
         .in(bus_out),
-        .out(dsp_out)
+        .out(dsp_out),
+        .trigger(OUT_EN)
     );
 
     assign OUT = RST ? 8'h55 : dsp_out;

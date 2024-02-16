@@ -4,17 +4,20 @@ module tiny16_tb;
     // Declare signals and variables
     reg CLK = 0;
     reg RST = 0;
-    wire [7:0] IN;
+    reg [7:0] IN;
+    wire IN_EN;
     wire [7:0] OUT;
+    wire OUT_EN;
     wire USBPU;
-    integer idx;
 
     // Instantiate the DUT (Design Under Test)
     tiny16 dut (
         .CLK(CLK),
         .RST(RST),
         .IN(IN),
+        .IN_EN(IN_EN),
         .OUT(OUT),
+        .OUT_EN(OUT_EN),
         .USBPU(USBPU)
     );
 
@@ -46,10 +49,29 @@ module tiny16_tb;
                   );
         $dumpvars(0, dut);
 
+        IN <= 0;
+
         // simulate reset
         RST <= 1;
         #8;
         RST <= 0;
+
+        #128;
+        IN <= 1;
+        #128;
+        IN <= 0;
+        #128;
+        IN <= 2;
+        #128;
+        IN <= 0;
+        #128;
+        IN <= 4;
+        #128;
+        IN <= 0;
+        #128;
+        IN <= 8;
+        #128;
+        IN <= 0;
 
         #4096;
 

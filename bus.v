@@ -9,6 +9,8 @@ module bus (
   input [15:0] reg_out,
   input ctl_out_en,
   input [15:0] ctl_out,
+  input kbd_out_en,
+  input [15:0] kbd_out,
   output [15:0] out
 );
 
@@ -17,5 +19,6 @@ module bus (
                mem_out_en ? mem_out :
                reg_out_en ? reg_out :
                ctl_out_en ? ctl_out :
+               kbd_out_en ? kbd_out :
                16'h0000;
 endmodule
