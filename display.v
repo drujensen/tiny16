@@ -13,12 +13,10 @@ module display (
       out <= 0;
     end else begin
       if (in_en) begin
-        trigger <= 1;
         out <= in[7:0];
-      end 
-      if (trigger) begin
+        trigger <= 1;
+      end else begin
         trigger <= 0;
-        out <= 0;
       end
     end
   end
