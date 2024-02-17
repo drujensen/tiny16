@@ -5,7 +5,6 @@ module tiny16_tb;
     reg CLK = 0;
     reg RST = 0;
     reg [7:0] IN;
-    wire IN_EN;
     wire [7:0] OUT;
     wire OUT_EN;
     wire USBPU;
@@ -15,7 +14,6 @@ module tiny16_tb;
         .CLK(CLK),
         .RST(RST),
         .IN(IN),
-        .IN_EN(IN_EN),
         .OUT(OUT),
         .OUT_EN(OUT_EN),
         .USBPU(USBPU)
@@ -55,23 +53,6 @@ module tiny16_tb;
         RST <= 1;
         #8;
         RST <= 0;
-
-        #128;
-        IN <= 1;
-        #128;
-        IN <= 0;
-        #128;
-        IN <= 2;
-        #128;
-        IN <= 0;
-        #128;
-        IN <= 4;
-        #128;
-        IN <= 0;
-        #128;
-        IN <= 8;
-        #128;
-        IN <= 0;
 
         #4096;
 

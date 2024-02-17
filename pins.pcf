@@ -52,7 +52,6 @@ set_io PIN_4 C2
 # set_io PIN_12 J1
 # set_io PIN_13 H2
 
-set_io OUT_EN C1
 set_io OUT[7] H2
 set_io OUT[6] J1
 set_io OUT[5] H1
@@ -61,6 +60,7 @@ set_io OUT[3] E1
 set_io OUT[2] E2
 set_io OUT[1] D1
 set_io OUT[0] D2
+set_io OUT_EN C1
 
 # Right side of board
 # set_io PIN_14 H9
@@ -71,14 +71,13 @@ set_io OUT[0] D2
 # set_io PIN_19 B8
 # set_io PIN_20 A8
 # set_io PIN_21 B7
-#set_io PIN_22 A7
+set_io PIN_22 A7
 set_io PIN_23 B6
 #set_io PIN_24 A6
 
 # RESET
 set_io RST A6 # input
 
-set_io IN_EN A7
 set_io IN[0] H9
 set_io IN[1] D9
 set_io IN[2] D8

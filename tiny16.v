@@ -11,7 +11,6 @@ module tiny16 (
     input  CLK,            // 16MHz clock
     input  RST,            // reset pin
     input  [7:0] IN,       // 8-bit input
-    output IN_EN,          // input enable
     output [7:0] OUT,      // 8-bit output
     output OUT_EN,
     output USBPU           // USB pull-up resistor
@@ -117,14 +116,12 @@ module tiny16 (
         .reg_sp_dec(reg_sp_dec),
         .reg_out_en(reg_out_en),
         .ctl_out_en(ctl_out_en),
-        .kbd_trigger_en(kbd_trigger_en),
         .kbd_out_en(kbd_out_en),
         .dsp_in_en(dsp_in_en),
         .out(ctl_out)
     );
 
     wire kbd_out_en;
-    wire kbd_trigger_en;
     wire [15:0] kbd_out;
 
     keyboard kbd (
@@ -132,9 +129,7 @@ module tiny16 (
         .rst(RST),
         .in(IN),
         .out_en(kbd_out_en),
-        .out(kbd_out),
-        .trigger_en(kbd_trigger_en),
-        .trigger(IN_EN)
+        .out(kbd_out)
     );
 
     wire [15:0] bus_out;

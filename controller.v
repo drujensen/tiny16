@@ -22,7 +22,6 @@ module controller (
   output reg reg_br_en,
   output reg reg_out_en,
   output reg ctl_out_en,
-  output reg kbd_trigger_en,
   output reg kbd_out_en,
   output reg dsp_in_en,
   output [15:0] out
@@ -116,13 +115,9 @@ module controller (
               1 : begin // IN
                 case (counter)
                   3: begin
-                    kbd_trigger_en <= 1;
-                  end
-                  7: begin
                     reg_dst_sel <= dst;
                     kbd_out_en <= 1;
                     reg_in_en <= 1;
-                    kbd_trigger_en <= 0;
                   end
                 endcase
               end
