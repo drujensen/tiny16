@@ -205,7 +205,7 @@ class T16as
     end
     puts program
 
-    puts "replace strings with 8-bit ascii binary"
+    puts "replace strings with 16-bit ascii binary"
     program = program.map do |line|
       if line.includes? "\""
         parts = line.split("\"")

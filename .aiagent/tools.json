@@ -1,0 +1,137 @@
+[
+  {
+    "id": "0087206E-C4C2-4954-AE55-6D820C696306",
+    "tool_type": "FileSearch",
+    "name": "FileSearch",
+    "description": "This tool provides the ability to search for text in files. The workspace directory is prepended to any file paths specified.",
+    "configurations": {},
+    "created_at": "2025-07-14T21:05:42.412450321-07:00",
+    "updated_at": "2025-07-14T21:05:42.412450321-07:00"
+  },
+  {
+    "id": "436F6B15-D874-4498-A243-A4711D09FB66",
+    "tool_type": "FileRead",
+    "name": "FileRead",
+    "description": "This tool provides the ability to read files. The workspace directory is prepended to any file paths specified.",
+    "configurations": {},
+    "created_at": "2025-07-14T21:05:42.412867396-07:00",
+    "updated_at": "2025-07-14T21:05:42.412867396-07:00"
+  },
+  {
+    "id": "9F7A3B2C-5E8D-4C9A-B1D2-3E4F5A6B7C8D",
+    "tool_type": "FileWrite",
+    "name": "FileWrite",
+    "description": "This tool provides file writing and modification operations, including overwriting, editing, inserting, and deleting content in files. The workspace directory is prepended to any file paths specified.",
+    "configurations": {},
+    "created_at": "2025-07-14T21:05:42.4131436-07:00",
+    "updated_at": "2025-07-14T21:05:42.4131436-07:00"
+  },
+  {
+    "id": "2A8C9D3E-7F1B-4E2C-A3F4-5B6C7D8E9F0A",
+    "tool_type": "Directory",
+    "name": "Directory",
+    "description": "This tool provides directory operations, including listing directory contents, building directory trees, creating and moving directories. The workspace directory is prepended to any paths specified.",
+    "configurations": {},
+    "created_at": "2025-07-14T21:05:42.413444303-07:00",
+    "updated_at": "2025-07-14T21:05:42.413444303-07:00"
+  },
+  {
+    "id": "501A9EC8-633A-4BD2-91BF-8744B7DC34EC",
+    "tool_type": "WebSearch",
+    "name": "WebSearch",
+    "description": "This tool searches the web using the Tavily API.",
+    "configurations": {
+      "tavily_api_key": "#{TAVILY_API_KEY}#"
+    },
+    "created_at": "2025-07-14T21:05:42.413781172-07:00",
+    "updated_at": "2025-07-14T21:05:42.413781172-07:00"
+  },
+  {
+    "id": "AE3E4944-253D-4188-BEB0-F370A6F9DC6F",
+    "tool_type": "Bash",
+    "name": "Bash",
+    "description": "This tool executes a bash command with support for background processes, timeouts, and full output.\n\nThe command is executed in the workspace directory.",
+    "configurations": {},
+    "created_at": "2025-07-14T21:05:42.414100833-07:00",
+    "updated_at": "2025-07-14T21:05:42.414100833-07:00"
+  },
+  {
+    "id": "4EA3F4A2-EFCD-4E9A-A5F8-4DFFAFB018E7",
+    "tool_type": "Process",
+    "name": "Git",
+    "description": "This tool executes a configured CLI command with support for background processes, timeouts, and full output.\n\nThe command is executed in the workspace directory. The extraArgs are prepended with the arguments passed to the tool.",
+    "configurations": {
+      "command": "git"
+    },
+    "created_at": "2025-07-14T21:05:42.414449368-07:00",
+    "updated_at": "2025-07-14T21:05:42.414449368-07:00"
+  },
+  {
+    "id": "8C4E1573-59D9-463B-AF5F-1EA7620F469D",
+    "tool_type": "Process",
+    "name": "Go",
+    "description": "This tool executes a configured CLI command with support for background processes, timeouts, and full output.\n\nThe command is executed in the workspace directory. The extraArgs are prepended with the arguments passed to the tool.",
+    "configurations": {
+      "command": "go"
+    },
+    "created_at": "2025-07-14T21:05:42.414900277-07:00",
+    "updated_at": "2025-07-14T21:05:42.414900277-07:00"
+  },
+  {
+    "id": "50A77E90-D6D3-410C-A7B4-6A3E5E58253E",
+    "tool_type": "Process",
+    "name": "Python",
+    "description": "This tool executes a configured CLI command with support for background processes, timeouts, and full output.\n\nThe command is executed in the workspace directory. The extraArgs are prepended with the arguments passed to the tool.",
+    "configurations": {
+      "command": "python"
+    },
+    "created_at": "2025-07-14T21:05:42.415276229-07:00",
+    "updated_at": "2025-07-14T21:05:42.415276229-07:00"
+  },
+  {
+    "id": "382EE72F-68A2-41C2-B2B6-1F729324BCEC",
+    "tool_type": "Process",
+    "name": "Node",
+    "description": "This tool executes a configured CLI command with support for background processes, timeouts, and full output.\n\nThe command is executed in the workspace directory. The extraArgs are prepended with the arguments passed to the tool.",
+    "configurations": {
+      "command": "node"
+    },
+    "created_at": "2025-07-14T21:05:42.41574347-07:00",
+    "updated_at": "2025-07-14T21:05:42.41574347-07:00"
+  },
+  {
+    "id": "A8370999-C6F2-4D4E-9C57-CBD5056F85E3",
+    "tool_type": "Image",
+    "name": "Image",
+    "description": "This tool generates images using AI providers like XAI or OpenAI.",
+    "configurations": {
+      "api_key": "#{XAI_API_KEY}#",
+      "provider": "xai"
+    },
+    "created_at": "2025-07-14T21:05:42.416237836-07:00",
+    "updated_at": "2025-07-14T21:05:42.416237836-07:00"
+  },
+  {
+    "id": "70523B6A-18CD-4EE2-8661-4782EBD34A0F",
+    "tool_type": "Vision",
+    "name": "Vision",
+    "description": "This tool provides image understanding capabilities using providers like XAI or OpenAI, allowing processing of images via base64 or URLs combined with text prompts.",
+    "configurations": {
+      "api_key": "#{XAI_API_KEY}#",
+      "provider": "xai"
+    },
+    "created_at": "2025-07-14T21:05:42.416761952-07:00",
+    "updated_at": "2025-07-14T21:05:42.416761952-07:00"
+  },
+  {
+    "id": "8C2DBDF3-790C-472D-A8EB-F679EB0F887B",
+    "tool_type": "Project",
+    "name": "Project",
+    "description": "This tool reads project details from a configurable markdown file to provide context for AI agents.",
+    "configurations": {
+      "project_file": "AIAGENT.md"
+    },
+    "created_at": "2025-07-14T21:05:42.417376483-07:00",
+    "updated_at": "2025-07-14T21:05:42.417376483-07:00"
+  }
+]
